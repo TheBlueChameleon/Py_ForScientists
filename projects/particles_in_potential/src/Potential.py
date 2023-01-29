@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from Misc import Misc
 from Particle import Particle
@@ -12,10 +12,10 @@ class Potential:
         self.epsilon = epsilon
 
         self.discrete = False
-        self.field_force = None
-        self.field_potential = None
         self.grid_points = None
         self.grid = None
+        self.field_potential = None
+        self.field_force = None
 
     def _handle_expression_potential(self, expression):
         if not callable(expression):
@@ -34,6 +34,7 @@ class Potential:
 
         :return: a function computing the partial derivatives wrt. all axes
         """
+
         def inner(*coordinates):
             funcs = [Misc.bind_all_parameters_but_ith(self.expression_potential, i, coordinates)
                      for i in range(Particle.N_dimensions)]
@@ -63,14 +64,14 @@ class Potential:
         descriptor = self._handle_size_and_resolution(args)
 
         self.grid_points = [np.arange(*axis) for axis in descriptor]
-        self.grid = np.meshgrid(*self.grid_points)
+        self.grid = np.meshgrid(*self.grid_points, indexing='ij')
 
         self.field_potential = self.expression_potential(*self.grid)
+
         list_of_forces = self.expression_force(*self.grid)
         self.field_force = np.stack(tuple(list_of_forces))
 
         self.discrete = True
-
 
     def _handle_size_and_resolution(self, descriptor):
         correct = True
@@ -102,10 +103,11 @@ class Potential:
     # field access helper
 
     def get_nearest_indices(self, coordinates):
-        return tuple(
+        result = tuple(
             np.abs(grid_points - coordinate).argmin()
             for coordinate, grid_points in zip(coordinates, self.grid_points)
         )
+        return result
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # access to potential field
@@ -147,7 +149,7 @@ class Potential:
 
     def show_plot(self):
         if Particle.N_dimensions == 2:
-            fig, axs = plt.subplots(1,2)
+            fig, axs = plt.subplots(1, 2)
             fig.set_size_inches(12, 5)
 
             axs[0].set_title("Potential Landscape")

@@ -51,8 +51,8 @@ if __name__ == '__main__':
 
     tic = time.perf_counter()
     sim.potential.precompute(
-        (-2, +2, .05),
-        (-2, +2, .05)
+        (-1.5, +1.5, .01),
+        (-0.2, +1.2, .01)
     )
     toc = time.perf_counter()
     t_precompute = (toc - tic) * 1000
