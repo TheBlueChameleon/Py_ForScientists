@@ -35,8 +35,14 @@ class Simulation:
 
     # ---------------------------------------------------------------------------------------------------------------- #
 
+    def get_t_max(self):
+        return self.t_max
+
     def set_t_max(self, t_max):
         self.t_max = t_max
+
+    def get_dt(self, dt):
+        return self.dt
 
     def set_dt(self, dt):
         self.dt = dt

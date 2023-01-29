@@ -8,13 +8,13 @@ from Potential import Potential
 from Simulation import Simulation
 
 
-def mexican_hat_potential(x, y):
+def decaying_oscillation_potential(x, y):
     r = np.sqrt(x * x + y * y)
     mag = np.exp(-Constants.decay * (r * r))
     return 2 * mag * np.cos(Constants.frequency * r)
 
 def setup_simulation():
-    potential = Potential(mexican_hat_potential)
+    potential = Potential(decaying_oscillation_potential)
 
     sim = Simulation(potential)
     sim.set_dt(0.005)
