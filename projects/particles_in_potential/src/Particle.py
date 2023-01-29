@@ -63,7 +63,7 @@ class Particle:
 
     def __getitem__(self, key):
         t = type(key)
-        if t == int:
+        if t == int or t == slice:
             return self.data[key]
         elif t == str:
             if key == "mass":
@@ -92,7 +92,7 @@ class Particle:
     # ---------------------------------------------------------------------------------------------------------------- #
 
     def __add__(self, other):
-        # self._handle_typecheck(other) -- already called by +=
+        # self._handle_typecheck(other) -- implicitly called by += (__iadd__)
         result = copy.deepcopy(self)
         result += other
         return result

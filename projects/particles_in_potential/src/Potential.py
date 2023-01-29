@@ -18,6 +18,12 @@ class Potential:
         self.field_force = None
 
     def _handle_expression_potential(self, expression):
+        """
+        Tests whether expression is a callable with compatible amount of attributes, or raises a ValueError if not
+
+        :param expression: the callable to test
+        :return: expression
+        """
         if not callable(expression):
             raise TypeError(f"Expression '{self.expression_potential}' is not callable")
 
