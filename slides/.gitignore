@@ -6,5 +6,6 @@
 *.snm
 *.synctex.gz
 *.toc
+*.vrb
 **/*minted*/*
 **/.~lock*
