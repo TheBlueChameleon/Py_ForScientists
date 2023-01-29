@@ -60,21 +60,21 @@ The below list of topics is a non-exhaustive list of what I feel capable of expl
         - csv -- a human readable tabular format, apt to be loaded in spreadsheet programs like MS Excel or Libre Office Calc
         - xml -- an arguably human readable format for complex structured text-based information
 
-    + Concurrency
+    + Concurrency (multitasking)
         - threading -- "multitasking in a single processor"
         - multiprocessing -- using multiple processors at once
         - asyncio -- another multitasking paradigm
 
     + Interaction with the environment outside of the Python Script
         - subprocess -- executing other programs from within a Python script and working with their output
-        - os -- foo
-        - glob -- foo
+        - os -- communicating with the operating system and the file system in particular
+        - glob -- traversing the file system with pattern matching
 
     + Internet and networking
         - urllib -- downloading information from the web into memory
-        - ftplib -- communication with a fileserver over the FTP protocol
-        - imaplib -- sending and receiving email (the more modern protocol)Beginning
-        - poplib -- sending and receiving email (the older and hardly any more in use protocol)Beginning
+        - ftplib -- communication with a file server over the FTP protocol
+        - imaplib -- sending and receiving email (the more modern protocol)
+        - poplib -- sending and receiving email (the older and hardly any more in use protocol)
 
     + Time
         - timeit -- measuring execution time
@@ -87,21 +87,21 @@ The below list of topics is a non-exhaustive list of what I feel capable of expl
 
     + Misc
         - tkinter -- graphical user interfaces
-        - itertools -- foo
-        - functools -- foo
-        - unittest -- foo
-        - sys -- foo
-        - re -- RegExes: Pattern matching in strings
-        - collections -- foo
-        - pprint -- foo
-        - graphlib -- foo
+        - itertools -- helpers for working with lists and other iterables
+        - functools -- multi purpose tools to transform functions into harder better stronger faster functions
+        - unittest -- writing automated tests to ensure your code does what you want
+        - sys -- affecting Python under the hood
+        - re -- RegExes: pattern matching in strings
+        - collections -- data container classes
+        - pprint -- pretty print -- formatted text output on the console with minimal effort
+        - graphlib -- working with graph-like structures
 
 * General concepts in IT
     + Text representation in memory/encoding, Unicode and UTF
     + File System Features
     + Big O notation
     + git, github and gitlab -- version control and backups
-    + IDEs -- QtCreator for Python, IntelliJ, Eclipse, Spyder
+    + IDEs -- PyCharm (and IntelliJ), QtCreator for Python, Eclipse, Spyder
 
 
 ## Example Curriculum
@@ -116,6 +116,13 @@ The following selection from the topics above is based on my personal experience
 
 * Writing fast code
     - Code analysis, Big-O notation
-    - Profiling
     - numpy
-    -
+    - Profiling
+
+* Recommended Topics for the subsequent sessions
+    - SciPy: Integration, Fourier Analysis, Curve Fitting, ODEs and PDEs
+    - Python concepts: Iterators, Decorators, Magic Methods, Type Annotations
+    - IT concepts: Unit tests, Git repositories, automated documentation generation
+    - pandas: queries on data frames
+    - Parallelization: using multiple processors at once
+    - argparse and configparser: feeding inputs into your program from the command line and from text files
