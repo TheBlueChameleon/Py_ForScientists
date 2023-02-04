@@ -139,6 +139,28 @@
 
 % =========================================================================== %
 
+\begin{frame}
+%
+\begin{center}
+%
+\begin{minipage}{6cm}
+\includegraphics[height=\textheight]{./gfx/01-xkcd-good-code}
+\end{minipage}
+%
+\begin{minipage}[c]{4cm}
+\scriptsize
+\emph{You can either hang out in the Android Loop or the HURD loop.}
+\vspace{4pt}
+
+\url{https://xkcd.com/844/}
+\end{minipage}
+%
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}{Setting Up a Project}
 %
 \begin{columns}
@@ -332,6 +354,33 @@ Example \inPy{class Particle}:
 	\item If one class has a method \texttt{draw\_something} to create a plot, then another class should not implement a method \texttt{plot\_something}
 	\end{itemize}
 \end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Class Methods: Patterns}
+%
+\begin{itemize}
+\item Setters and state changing classes: monadic design
+	\begin{itemize}
+	\item Make change-methods \enquote{joinable}
+	\item \texttt{myObject.change\_property\_A().change\_property\_A()}
+	\item Simply end method code with \inPy{return self}
+	\end{itemize}
+\end{itemize}
+%
+\begin{hintbox}[Category Theory]
+\emph{A monad is a monoid in the category of endofunctors}
+
+\vspace{6pt}
+27 Unhelpful Facts About Category Theory\\
+\url{https://youtu.be/H0Ek86IH-3Y}
+
+\vspace{6pt}
+A Sensible Introduction to Category Theory\\
+\url{https://www.youtube.com/watch?v=yAi3XWCBkDo}
+\end{hintbox}
 %
 \end{frame}
 
