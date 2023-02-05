@@ -1,3 +1,3 @@
-from .Figure import Figure
-from .Plots.Observable import *
-from .Plots.Field import *
+from Figure import Figure
+from Plots import Field
+from Plots import Observable
