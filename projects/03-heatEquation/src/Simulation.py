@@ -136,19 +136,21 @@ class Simulation:
     # ================================================================================================================ #
 
     def run(self):
-        def dT(t: float, T: np.ndarray):
+        def dT(t: float, T: np.ndarray, operator: np.ndarray):
             T = T.reshape(self._shape)
 
-            dT = self._alpha * convolve(T, self._laplacian, mode='same')
+            dT = convolve(T, operator, mode='same')
             dT[self._fixed_gridpoints] = 0.
-
-            dT *= self._t_res
 
             return dT.reshape((T.size))
 
         if self.is_ready():
+            # pre-computing all factors into one operator saves a ton of multiplications
+            scaled_laplacian = self._alpha * self._t_res * self._laplacian
+
             self._result = solve_ivp(dT, t_span=(self._t_min, self._t_max), y0=self._initial_state.flatten(),
-                                     t_eval=self._t, vectorized=True)
+                                     args=(scaled_laplacian,), t_eval=self._t, vectorized=True)
+
             final_shape = tuple((*self._shape, self._t.size))
             self._result.y = self._result.y.reshape(final_shape)
         else:
