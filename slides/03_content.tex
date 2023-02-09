@@ -673,14 +673,71 @@ An the subsequent slides, the word \emph{quadrature} will appear frequently. It 
 	\item \texttt{romb}
 	\item Note: These work much faster, but require data to already be in memory
 	\end{itemize}
-\item See \url{https://docs.scipy.org/doc/scipy/tutorial/integrate.html}
+\item For detaiols, see \url{https://docs.scipy.org/doc/scipy/tutorial/integrate.html} 
 \end{itemize}
 %
 \end{frame}
 
 % =========================================================================== %
 
-% do timing and accuracy of them
-% show romberg fail
+\begin{frame}
+%
+\begin{center}
+\includegraphics[width=\linewidth]{./gfx/03-timedints-1}
+\end{center}
+%
+\end{frame}
+
+
+% =========================================================================== %
+
+\begin{frame}
+%
+\begin{center}
+\includegraphics[width=\linewidth]{./gfx/03-timedints-2}
+\end{center}
+%
+\end{frame}
+
+
+% =========================================================================== %
+
+\begin{frame}
+%
+\begin{center}
+\includegraphics[width=\linewidth]{./gfx/03-timedints-3}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Beware of Periodic Functions When Using Romberg}
+%
+\begin{codebox}[Romberg Fails Periodic Functions]
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+f = lambda x: np.abs(np.sin(x))
+n = 10
+X = np.linspace(0, 2 * np.pi, 2 ** n + 1)
+Y = f(X)
+
+I = scipy.integrate.quad(f, X[0], X[-1])
+R = scipy.integrate.romberg(f, X[0], X[-1])
+
+print(f"Generic integration yielded {I[0]} +/- {I[1]}")
+print(f"Romberg integration yielded {R}.")
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Output: Romberg Fails Periodic Functions]
+\begin{minted}[fontsize=\scriptsize]{text}
+Generic integration yielded 4.0 +/- 4.440892098500626e-14
+Romberg integration yielded 7.694682774887159e-16.
+\end{minted}
+\end{cmdbox}
+%
+\end{frame}
+
+
 % go for odes
 % main take aways?
