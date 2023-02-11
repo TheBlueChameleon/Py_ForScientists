@@ -89,7 +89,7 @@ def simulation_2D():
 
     sim = Simulation()
     sim.set_t_max(50) \
-        .set_t_res(.05) \
+        .set_t_res(.25) \
         .set_shape((size_x, size_y)) \
         .set_alpha(5)
 
@@ -109,8 +109,8 @@ def simulation_2D():
     sim.show_plot_final_state()
 
 if __name__ == '__main__':
-    showcase_solve_ivp()
-    showcase_laplacian_convolution_matrix()
+    # showcase_solve_ivp()
+    # showcase_laplacian_convolution_matrix()
 
-    simulation_1D()
+    #simulation_1D()
     simulation_2D()
