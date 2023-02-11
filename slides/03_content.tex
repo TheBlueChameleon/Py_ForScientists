@@ -10,7 +10,7 @@
 %
 \begin{columns}
 \column{.6\linewidth}
-\includegraphics[width=.8\linewidth]{./gfx/03-xkcd-differentiation_and_integration}\\
+\includegraphics[width=0.8\linewidth]{./gfx/03-xkcd-differentiation_and_integration}\\
 %
 \column{.3\linewidth}
 \scriptsize
@@ -25,7 +25,7 @@
 
 % =========================================================================== %
 
-\begin{frame}{Scope for today}
+\begin{frame}{Scope for Today}
 %
 \begin{itemize}
 \item Numerical Derivatives
@@ -39,10 +39,10 @@
 	\item Ideas for approximations
 	\item SciPy to the rescue
 	\end{itemize}
-\item Differential Equations
+\item Next Time: Differential Equations
 	\begin{itemize}
-	\item First order
-	\item Second and higher order
+	\item By Integration and by eigenvalue
+	\item First order, Second and higher order
 	\item Partial differential equations
 	\end{itemize}
 \end{itemize}
@@ -68,7 +68,7 @@
 \end{defbox}
 %
 \begin{itemize}
-\item Standard Approach (1): Finite Differences: Set $\varepsilon$ to an arbitrary small but nonzero value
+\item Standard approach (1): Finite Differences: Set $\varepsilon$ to an arbitrary small but nonzero value
 \item Works, but error-prone
 	\begin{itemize}
 	\item Essentially amplified rounding errors
@@ -76,7 +76,7 @@
 	\end{itemize}
 \item Small mitigation: central difference method (2)
 	\begin{itemize}
-	\item Improves the maths, not the rounding errors
+	\item Better, but does not get rid of the underlying problem
 	\end{itemize}
 \end{itemize}
 %
@@ -198,7 +198,6 @@
 	\item Ever faster oscillations closer to 0
 	\item Control oscillation via $c$; smaller means faster
 	\item Code for subsequent figures on GRIPS
-	\item See \todo{specify location}
 	\end{itemize}
 \end{itemize}
 %
@@ -311,7 +310,7 @@
 
 \begin{frame}[fragile]
 %
-\begin{codebox}[Scalar field and derivatives]
+\begin{codebox}[Scalar Field and Derivatives]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 import matplotlib.pyplot as plt
 import numpy as np
@@ -613,7 +612,7 @@ An the subsequent slides, the word \emph{quadrature} will appear frequently. It 
 \item Particular advantage: boundary values do not contribute to integral
 	\begin{itemize}
 	\item Useful in situations where derivatives are integrated
-	\item Very high accuracy
+	\item Very high accuracy \emph{if well approximated by a polynomial}
 	\end{itemize}
 \item Requires internal rescaling
 	\begin{itemize}
@@ -664,7 +663,7 @@ An the subsequent slides, the word \emph{quadrature} will appear frequently. It 
 	\item \texttt{quad\_vec} -- for vector valued functions
 	\item \texttt{dblquad} and \texttt{tplquad} -- compute $\iint f(x, y) \dd{y}\dd{x}$ and $\iiint f(x, y, z) \dd{z}\dd{y}\dd{x}$
 	\item \texttt{fixed\_quad} and \texttt{quadrature} -- Gaussian quadrature
-	\item \texttt{romberg} -- Gaussian quadrature
+	\item \texttt{romberg} -- Guess which quadrature
 	\end{itemize}
 \item Implementations on a pre-computed array
 	\begin{itemize}
@@ -673,7 +672,7 @@ An the subsequent slides, the word \emph{quadrature} will appear frequently. It 
 	\item \texttt{romb}
 	\item Note: These work much faster, but require data to already be in memory
 	\end{itemize}
-\item For detaiols, see \url{https://docs.scipy.org/doc/scipy/tutorial/integrate.html} 
+\item For details, see \url{https://docs.scipy.org/doc/scipy/tutorial/integrate.html} 
 \end{itemize}
 %
 \end{frame}
@@ -738,6 +737,24 @@ Romberg integration yielded 7.694682774887159e-16.
 %
 \end{frame}
 
+% =========================================================================== %\\
 
-% go for odes
-% main take aways?
+\begin{frame}{Take-Aways}
+%
+\begin{itemize}
+\item \texttt{quad} does a very good job most of the time, but is relatively slow
+\item Vector-Based integrators require extra-time for computing the vector, but can beat \texttt{quad} in both, time and accuracy
+	\begin{itemize}
+	\item Trapezoid fastest
+	\item Simpson slightly more accurate, often little difference
+	\end{itemize}
+\item Other function-based integrators can do better than both, but are error-prone
+\item Gaussian quadrature works very badly when integrand not well approximated by a polynomial
+	\begin{itemize}
+	\item This also holds for \emph{infinite} polynomials such as \texttt{exp}, \texttt{sin}
+	\item And for \emph{negative powers} like $\dfrac{1}{x}$ etc
+	\end{itemize}
+\item Romberg bad when dealing with periodic functions
+\end{itemize}
+%
+\end{frame}
