@@ -1,3 +1,4 @@
+import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sci
@@ -73,7 +74,7 @@ def first_order_ODE_mixed():
     t_max = 10
     times = np.linspace(t_min, t_max, 51)
 
-    result = sci.integrate.solve_ivp(f_prime, [t_min, t_max], [1], t_eval=times)
+    result = sci.integrate.solve_ivp(f_prime, [t_min, t_max], [y_0], t_eval=times)
     print(result)
 
     positions = result.y[0]
@@ -119,7 +120,7 @@ def second_order_ODE():
     positions = result.y[0, :]
     velocities = result.y[1, :]
 
-    plt.title("$y''(t) = cos(t)$")
+    plt.title("$y''(t) = \cos(t)$")
     plt.plot(times, positions, label="y(t): positions")
     plt.plot(times, velocities, label="y'(t): velocities")
     plt.legend()
@@ -136,7 +137,7 @@ def driven_dampened_harmonic_oscillator_1D():
     omega = 1.5
     amplitude = .5
 
-    driver_func = lambda t : -amplitude * np.sin(omega * t)
+    driver_func = lambda t: -amplitude * np.sin(omega * t)
 
     y_0 = 0
     v_0 = 1
@@ -148,8 +149,7 @@ def driven_dampened_harmonic_oscillator_1D():
         velocity = y[-1]
         position = y[0]
 
-        return (
-            velocity, (1 / mass) * (driver_func(t) - dampening * velocity - spring_constant * position))
+        return (velocity, (1 / mass) * (driver_func(t) - dampening * velocity - spring_constant * position))
 
     t_min = 0
     t_max = 20
@@ -174,7 +174,7 @@ def driven_dampened_harmonic_oscillator_1D():
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-def orbit():
+def orbit(method="RK45"):
     m_sun = 10
     r_planet = [1., 0.]
     v_planet = [0., .1]
@@ -202,7 +202,7 @@ def orbit():
     t_N = 1001
     times = np.linspace(t_min, t_max, t_N)
 
-    result = sci.integrate.solve_ivp(f_prime, [t_min, t_max], [*r_planet, *v_planet], t_eval=times)
+    result = sci.integrate.solve_ivp(f_prime, [t_min, t_max], [*r_planet, *v_planet], t_eval=times, method=method)
     print(result)
 
     positions = result.y[:2]
@@ -235,63 +235,62 @@ def orbit():
     plt.show()
 
 
-def orbit_RK23():
-    m_sun = 10
-    r_planet = [1., 0.]
-    v_planet = [0., .1]
-    G = 1e-3
+# -------------------------------------------------------------------------------------------------------------------- #
 
-    def f_prime(t, y):
-        # F = G * m_1 * m_2 / r**2
-        # a = F/m
-        # => a = G * m_1 * / r**2
-        # but the acceleration points toward the center, so, we get a scalar distance factor of:
-        # -G / r**3
-        # which is then multiplied with the current position.
+def laplacian_equation():
+    laplacian = np.zeros((3, 3), dtype=np.float)
+    laplacian[1, :] = +1
+    laplacian[:, 1] = +1
+    laplacian[1, 1] = -4
 
-        position = y[:2]
-        distance_factor = np.sum(position ** 2) ** (3 / 2)
-        accelereation = -(G * m_sun / distance_factor) * position
+    size_x = 50
+    size_y = 50
+    shape = (size_y, size_x)
+    field = np.random.random(shape)
 
-        result = np.roll(y, -2)
-        result[2:] = accelereation
-
-        return result
+    field[+0, :] = 0  # top row
+    field[-1, :] = 1  # bottom row
 
     t_min = 0
-    t_max = 100
-    t_N = 1001
-    times = np.linspace(t_min, t_max, t_N)
+    t_max = 200
+    t_eval = [10, t_max]
 
-    result = sci.integrate.solve_ivp(f_prime, [t_min, t_max], [*r_planet, *v_planet], t_eval=times, method='RK23')
+    def f_prime(t, y, shape, laplacian):
+        y = y.reshape(shape)
+
+        dy = sci.signal.convolve(y, laplacian, mode='same')
+        dy[+0, :] = 0  # top row
+        dy[-1, :] = 0  # bottom row
+
+        return dy.reshape(y.size)
+
+    result = sci.integrate.solve_ivp(f_prime, [t_min, t_max], field.reshape(field.size), args=(shape, laplacian),
+                                     t_eval=t_eval)
     print(result)
 
-    positions = result.y[:2]
-    velocities = result.y[2:]
+    fig, axs = plt.subplots(2, 3)
+    fig.set_size_inches(15, 10)
+    fig.suptitle("Solution to $\Delta \phi = 0$ with boundary conditions")
 
-    distances = np.sqrt(np.sum(positions ** 2, axis=0))
-    speeds = np.sqrt(np.sum(velocities ** 2, axis=0))
+    for row_id, time in enumerate(t_eval):
+        final_field = result.y[:, row_id].reshape(shape)
+        laplacian_values = sci.signal.convolve(final_field, laplacian)
+        forces_y, forces_x = np.gradient(final_field)
+        grid_y, grid_x = np.indices(shape)
 
-    potential_energies = -G * m_sun / distances
-    kinetic_energies = .5 * speeds
-    total_energies = potential_energies + kinetic_energies
+        gf0 = axs[row_id, 0].pcolor(final_field)
+        axs[row_id, 0].set_title(f"$\phi(x, y)$ at $t={time}$")
+        fig.colorbar(gf0)
 
-    fig, axs = plt.subplots(1, 2)
+        gf1 = axs[row_id, 1].pcolor(laplacian_values,
+                                    norm=colors.SymLogNorm(1e-4,        # linear scaling threshold
+                                                           vmin=laplacian_values.min(),
+                                                           vmax=laplacian_values.max()))
+        axs[row_id, 1].set_title(f"$\Delta \phi(x, y)$ at $t={time}$")
+        fig.colorbar(gf1)
 
-    fig.set_size_inches(16, 8)
-    fig.suptitle("Orbit (naive integrator)")
-
-    axs[0].set_title("Trajectory")
-    axs[0].plot(positions[0], positions[1])
-    axs[0].plot([0], [0], "ro")
-
-    axs[1].set_title("Energies")
-    axs[1].set_xlabel("time")
-    axs[1].set_ylabel("energy per unit mass")
-    axs[1].plot(times, potential_energies, label="potential energy")
-    axs[1].plot(times, kinetic_energies, label="kinetic energy")
-    axs[1].plot(times, total_energies, label="total energy")
-    axs[1].legend()
+        axs[row_id, 2].quiver(grid_x, grid_y, forces_x, forces_y)
+        axs[row_id, 2].set_title(f"$\\vec{{E}}(x, y)$ at $t={time}$")
 
     plt.show()
 
@@ -303,6 +302,7 @@ if __name__ == '__main__':
     # first_order_ODE_state_variable()
     # first_order_ODE_mixed()
     # second_order_ODE()
-    driven_dampened_harmonic_oscillator_1D()
-    # orbit()
-    # orbit_RK23()
+    # driven_dampened_harmonic_oscillator_1D()
+    orbit()
+    # orbit("RK23")
+    # laplacian_equation()
