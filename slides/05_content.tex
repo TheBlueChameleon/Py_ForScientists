@@ -21,7 +21,11 @@
 	\item Method, Weaknesses and Remedies
 	\item Detrending, Wiener Filter, Hipass/Lopass-Filter
 	\end{itemize}
-\item Interpolating and other cool stuff
+\item More cool stuff in SciPy
+	\begin{itemize}
+	\item Honorable Mentions
+	\item Links to the docs
+	\end{itemize}
 \end{itemize}
 %
 \end{frame}
@@ -667,10 +671,10 @@ See GRIPS for a 2D example.
 \begin{frame}{Removing Systematic Error: \texttt{scipy.signal.detrend}}
 %
 \begin{itemize}
-\item Determines a linear trend of form $n(t) = mt + o$
+\item Determines a linear trend of form $n(t) = s \cdot t + o$
 	\begin{itemize}
 	\item $o$: constant offset, $o = \dfrac{1}{N} \sum_i y_i$
-	\item $m$: average slope, such that $\sum_i y_i - o - mi = 0$
+	\item $s$: average slope, such that $\sum_i y_i - o - s \cdot i = 0$
 	\item[\Thus] Assumption: Equidistant data points
 	\end{itemize}
 \item Usage
@@ -747,7 +751,7 @@ See GRIPS for a 2D example.
 
 % =========================================================================== %
 
-\begin{frame}
+\begin{frame}{Filtered Signals -- Examples}
 %
 \begin{columns}
 \column{.7\linewidth}
