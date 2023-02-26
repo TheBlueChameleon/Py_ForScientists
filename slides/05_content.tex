@@ -622,6 +622,26 @@ See GRIPS for a 2D example.
 
 % =========================================================================== %
 
+\begin{frame}{Tangent: Runge Spikes}
+%
+\begin{columns}
+\column{.5\linewidth}
+\includegraphics[width=.8\linewidth]{./gfx/05-runge-spikes}
+\url{https://youtu.be/F_43oTnTXiw}
+%
+\column{.4\linewidth}
+\begin{itemize}
+\item You can perfectly fit a polynomial of degree $N$ on $N + 1$ data points
+\item The result does not necessarily make sense
+\item Only fit functions that actually make sense in the context
+\item If you do use polynomials as an approximation, use Chebyshev spacing
+\end{itemize}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}{Metamaterials}
 %
 \begin{columns}
@@ -651,17 +671,18 @@ See GRIPS for a 2D example.
 	\item $f(t)$: \enquote{true}, physical principle
 	\item $n(t)$: Noise
 	\end{itemize}
-\item Random noise
-	\begin{itemize}
-	\item Average zero
-	\item Uniform or symmetric distribution (\zB Gaussian) around zero
-	\end{itemize}
 \item Systematic error
 	\begin{itemize}
 	\item Constant offset
 	\item Linear trend
 	\item ...
 	\end{itemize}
+\item Random noise
+	\begin{itemize}
+	\item Average zero
+	\item Uniform or symmetric distribution (\zB Gaussian) around zero
+	\end{itemize}
+\item Combination of both
 \end{itemize}
 %
 \end{frame}
