@@ -311,16 +311,17 @@ fft_original = sci.fft.fft2(img_original)
 # for plotting:
 # compute absolute values from complex Fourier data
 # low-frequency contributions are dominant. Compute log to bring them closer together
-fla_original = np.log(np.absolute(fft_original))
+display_original = roll(np.log(np.absolute(fft_original)))
 
-high_pass_filter_size = 20
-fft_high_pass_filter = fft_original.copy()
-fft_high_pass_filter[:high_pass_filter_size , :high_pass_filter_size ] = 0
-fft_high_pass_filter[-high_pass_filter_size:, -high_pass_filter_size:] = 0
-fft_high_pass_filter[-high_pass_filter_size:, :high_pass_filter_size ] = 0
-fft_high_pass_filter[:high_pass_filter_size , -high_pass_filter_size:] = 0
-fla_high_pass_filter = np.log(np.absolute(fft_high_pass_filter))
-img_high_pass_filter = sci.fft.ifft2(fft_high_pass_filter).real
+img_size = img_original.shape
+mask = create_cirular_mask(img_size, 20)
+    
+fft_hi_pass_filter = roll(fft_original.copy())
+fft_hi_pass_filter[mask] = 0
+display_hi_pass_filter = roll(np.log(np.absolute(fft_hi_pass_filter)))
+fft_hi_pass_filter = roll(fft_hi_pass_filter)
+img_hi_pass_filter = sci.fft.ifft2(fft_hi_pass_filter).real
+display_hi_pass_filter = roll(display_hi_pass_filter)
 
 # similar for low pass filter
 # matplotlib-commands
@@ -333,7 +334,7 @@ img_high_pass_filter = sci.fft.ifft2(fft_high_pass_filter).real
 
 \begin{frame}{2D Fourier Transform And The Secret Of JPEG}
 %
-\begin{columns}
+\begin{columns}[T]
 \column{.75\linewidth}
 \includegraphics[width=\linewidth]{./gfx/05-FFT-2D}
 %
