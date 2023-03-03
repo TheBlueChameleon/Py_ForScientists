@@ -1,0 +1,7 @@
+* what is iterator
+* short form: yield
+* shorter form: generator expression
+* long tangent: lazy evaluation paradigm
+    - short circuiting
+    - map
+* itertools

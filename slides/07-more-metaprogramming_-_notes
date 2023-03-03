@@ -1,0 +1,8 @@
+* type hints / annotations
+    - which dict stores them
+* __name__, __doc__, etc
+* linters like mypy
+* IDE support by type hints
+* decorators using type hints and meta stuff
+    - dataclass
+    - wraps
