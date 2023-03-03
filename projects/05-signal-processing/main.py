@@ -9,5 +9,5 @@ import fourier
 
 if __name__ == '__main__':
     # curve_fit.main()
-    noisy_functions.main()
-    # fourier.main()
+    # noisy_functions.main()
+    fourier.main()

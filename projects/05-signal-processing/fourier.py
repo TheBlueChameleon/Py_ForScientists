@@ -71,38 +71,61 @@ def synthesized():
 
 
 def fourier_2d():
+    def roll(img):
+        img = np.roll(img, img.shape[0] // 2, axis=0)
+        img = np.roll(img, img.shape[1] // 2, axis=1)
+        return img
+
+    def create_cirular_mask(shape, radius):
+        w, h = shape
+        center = (w//2, h//2)
+
+        Y, X = np.ogrid[:h, :w]
+        dist_from_center_squared = (X - center[0]) ** 2 + (Y - center[1]) ** 2
+
+        mask = dist_from_center_squared <= (radius ** 2)
+        return mask
+
     img_original = 256 - sci.misc.ascent()
     fft_original = sci.fft.fft2(img_original)
-    fla_original = np.log(np.absolute(fft_original))
-    size = img_original.shape
+    display_original = roll(np.log(np.absolute(fft_original)))
 
-    fft_hi_pass_filter = fft_original.copy()
-    hi_pass_filter_size = 20
-    fft_hi_pass_filter[:hi_pass_filter_size, :hi_pass_filter_size] = 0
-    fft_hi_pass_filter[-hi_pass_filter_size:, -hi_pass_filter_size:] = 0
-    fft_hi_pass_filter[-hi_pass_filter_size:, :hi_pass_filter_size] = 0
-    fft_hi_pass_filter[:hi_pass_filter_size, -hi_pass_filter_size:] = 0
-    fla_hi_pass_filter = np.log(np.absolute(fft_hi_pass_filter))
+    img_size = img_original.shape
+    mask = create_cirular_mask(img_size, 20)
+
+    fft_hi_pass_filter = roll(fft_original.copy())
+    fft_hi_pass_filter[mask] = 0
+    display_hi_pass_filter = roll(np.log(np.absolute(fft_hi_pass_filter)))
+    fft_hi_pass_filter = roll(fft_hi_pass_filter)
     img_hi_pass_filter = sci.fft.ifft2(fft_hi_pass_filter).real
 
-    fft_lo_pass_filter = fft_original.copy()
-    lo_pass_filter_size = 225
-    fft_lo_pass_filter[size[0]//2 - lo_pass_filter_size:size[0]//2 + lo_pass_filter_size,
-                       size[1]//2 - lo_pass_filter_size:size[1]//2 + lo_pass_filter_size] = 0
-    fla_lo_pass_filter = np.log(np.absolute(fft_lo_pass_filter))
+    display_hi_pass_filter = roll(display_hi_pass_filter)
+
+    mask = np.logical_not(create_cirular_mask(img_size, 60))
+
+    fft_lo_pass_filter = roll(fft_original.copy())
+    fft_lo_pass_filter[mask] = 0
+    display_lo_pass_filter = roll(np.log(np.absolute(fft_lo_pass_filter)))
+    fft_lo_pass_filter = roll(fft_lo_pass_filter)
     img_lo_pass_filter = sci.fft.ifft2(fft_lo_pass_filter).real
+
+    display_lo_pass_filter = roll(display_lo_pass_filter)
 
     fig, axs = plt.subplots(2, 3)
     fig.set_size_inches(16, 12)
 
+    frequencies_X = np.arange(-img_size[0] // 2, img_size[0] // 2)
+    frequencies_Y = np.arange(-img_size[1] // 2, img_size[1] // 2)
+    kX, kY = np.meshgrid(frequencies_X, frequencies_Y)
+
     axs[0, 0].imshow(img_original, cmap='Greys')
-    axs[1, 0].imshow(fla_original, cmap='viridis')
+    axs[1, 0].pcolor(kX, -kY,display_original, cmap='viridis')
 
     axs[0, 1].imshow(img_hi_pass_filter, cmap='Greys')
-    axs[1, 1].imshow(fla_hi_pass_filter, cmap='viridis')
+    axs[1, 1].pcolor(kX, -kY, display_hi_pass_filter, cmap='viridis')
 
     axs[0, 2].imshow(img_lo_pass_filter, cmap='Greys')
-    axs[1, 2].imshow(fla_lo_pass_filter, cmap='viridis')
+    axs[1, 2].pcolor(kX, -kY, display_lo_pass_filter, cmap='viridis')
 
     plt.show()
 
