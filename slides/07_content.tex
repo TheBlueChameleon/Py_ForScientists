@@ -527,9 +527,9 @@ class Person:
 \begin{minted}[fontsize=\scriptsize, linenos]{python3}
 def derivative(f, epsilon = 1E-6):
     def inner(x):
-        return (0.5 / epsilon) * (f(x - epsilon) - 2 * f(x) + f(x + epsilon))
+        return (f(x + epsilon) - f(x - epsilon)) / (2 * epsilon)
     
-    if "__call__" in dir(f):
+    if "__call__" in dir(f):   # or: if callable(f)
         if f.__code__.co_args == 1:
             return inner
         else:
@@ -542,7 +542,7 @@ def derivative(f, epsilon = 1E-6):
 %
 \begin{cmdbox}[Output: \texttt{derivative.\_\_code\_\_.co\_code}]
 \begin{minted}[fontsize=\scriptsize]{text}
-b'\x87\x00\x87\x01f\x02d\x01d\x02\x84\x08}\x02d\x03t\x00\x88\x01\x83\x01v\x00r 
+b'\x87\x00\x87\x01f\x02d\x01d\x02\x84\x08}\x02d\x03t\x00\x88\x01\x83\x01v\x00r
   \x88\x01j\x01j\x02d\x04k\x02r\x15|\x02S\x00t\x03d\x05\x88\x01j\x04\x9b\x00d
   \x06\x9d\x03d\x07\x17\x00\x83\x01\x82\x01t\x03d\x08\x83\x01\x82\x01'
 \end{minted}
