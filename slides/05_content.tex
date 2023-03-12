@@ -198,8 +198,8 @@ Fourier Sine Transform
 	\begin{itemize}
 	\item Function in frequency domain, complex valued
 	\item \inPy{result[0]}: constant offset (frequency = 0)
-	\item \inPy{result[k]} for $\texttt{k} \in [1, ..., \lfloor \sfrac{N}{2} \rfloor]$: complex amplitude for $\omega = \dfrac{2\pi k}{\max(t_k)}$
-	\item \inPy{result[k]} for $\texttt{k} \in [\lfloor \sfrac{N}{2} \rfloor + 1, ... N -1]$: complex amplitude for $\omega = \dfrac{2\pi (k-N)}{\max(t_k)}$
+	\item \inPy{result[k]} for $\texttt{k} \in [1, ..., \lfloor \sfrac{N}{2} \rfloor]$: complex amplitude for $\omega_k = \dfrac{2\pi k}{\max(t_k)}$
+	\item \inPy{result[k]} for $\texttt{k} \in [\lfloor \sfrac{N}{2} \rfloor + 1, ... N -1]$: complex amplitude for $\omega_k = \dfrac{2\pi (N-k)}{\max(t_k)}$
 	\item[\Thus] Shifted by $\sfrac{N}{2}$. Undo with \texttt{np.roll(result, N//2)} or use \texttt{scipy.fft.fftshift}
 	\end{itemize}
 \end{itemize}
