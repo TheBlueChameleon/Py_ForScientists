@@ -1,4 +1,5 @@
 import cProfile
+import pstats
 
 import numpy as np
 
@@ -12,6 +13,7 @@ def decaying_oscillation_potential(x, y):
     r = np.sqrt(x * x + y * y)
     mag = np.exp(-Constants.decay * (r * r))
     return 2 * mag * np.cos(Constants.frequency * r)
+
 
 def setup_simulation():
     potential = Potential(decaying_oscillation_potential)
@@ -33,16 +35,13 @@ def setup_simulation():
 
     return sim
 
-def run_full():
-    sim = setup_simulation()
-    run_without_precompute(sim)
-    run_with_precompute(sim)
 
 def run_without_precompute(sim):
     sim.autorun()
     compact_table = sim.get_compact_table()
     # no showing the plot, since this adds the human component of "when do they click on close"
     # still, computing the table which is used to inform the plots
+
 
 def run_with_precompute(sim):
     sim.potential.precompute(
@@ -53,5 +52,16 @@ def run_with_precompute(sim):
     compact_table = sim.get_compact_table()
     # same rationale as before
 
+
 if __name__ == '__main__':
-    cProfile.run('run_full()', sort='tottime')
+    with cProfile.Profile() as pr:
+        sim = setup_simulation()
+        run_without_precompute(sim)
+        run_with_precompute(sim)
+
+    stats = pstats.Stats(pr)
+    stats.sort_stats(pstats.SortKey.TIME)
+    stats.print_stats()
+
+    # a minimal call to the profiler:
+    # cProfile.run('run_full()', sort='tottime')
