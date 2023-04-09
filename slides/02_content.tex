@@ -303,7 +303,7 @@ runtime = (toc - tic) / N
 import timeit
 import math
 
-runtime = timeit('math.sqrt(9)', globals=globals())
+runtime = timeit.timeit('math.sqrt(9)', globals=globals())
 \end{minted}
 \end{codebox}
 %
@@ -466,7 +466,7 @@ This kind of behaviour avoids copying long lists and replaces the tedious step b
 \begin{itemize}
 \item Iterator: \enquote{Book keeping device}, stores how to find the next object in a loop
 	\begin{itemize}
-	\item Details: own lecture, if desired
+	\item Details: own lecture (if desired)
 	\end{itemize}
 \item Iterators are objects ...
 \item ... with their own methods ...
@@ -822,7 +822,7 @@ def list_numpy_append(N_list):
 
 \vspace{6pt}
 \begin{hintbox}[Donald Knuth says]
-We should forget about small efficiencies, say 97\% of the time: premature micro optimizations are the root of all evil.
+\emph{We should forget about small efficiencies, say 97\% of the time: premature micro optimizations are the root of all evil.}
 \end{hintbox}
 %
 \column{.3\linewidth}
