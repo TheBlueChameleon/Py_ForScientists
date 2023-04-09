@@ -1,0 +1,133 @@
+% =========================================================================== %
+% Yes. This is a document.
+
+\documentclass[
+	english,
+	aspectratio=169,
+	table
+]{beamer}
+
+% =========================================================================== %
+% Theme
+\usepackage{scrlfile}
+	\ReplacePackage{beamerthemeSHUR}{./sty/beamerthemeSHUR}
+	\ReplacePackage{beamerinnerthemefancy}{./sty/beamerinnerthemefancy}
+	\ReplacePackage{beamerouterthemedecolines}{./sty/beamerouterthemedecolines}
+	\ReplacePackage{beamercolorthemechameleon}{./sty/beamercolorthemechameleon}
+
+\usetheme[
+	pageofpages=/,
+	bullet=circle,
+	titleline=true,
+	alternativetitlepage=true,
+	watermark="",
+	watermarkheight=0px,
+	watermarkheightmult=0
+	]
+{SHUR}
+
+% =========================================================================== %
+% the usual stuff
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{csquotes}
+\usepackage{xspace}
+
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\usepackage{color, colortbl}
+\usepackage{xcolor}
+	\definecolor{tabhighlight}{RGB}{230,240,255}
+
+\usepackage{tabto}
+
+\usepackage{minted}
+	\usemintedstyle{friendly}
+
+\usepackage{tikz}
+	\usetikzlibrary{positioning}
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{shapes.geometric}
+	\usetikzlibrary{backgrounds}
+	\usetikzlibrary{calc}
+	\usetikzlibrary{decorations.pathreplacing}
+	\tikzstyle{every picture}+=[remember picture] 
+\usepackage{adjustbox}
+
+\usepackage{amsmath}
+\usepackage{physics}
+
+\usepackage[most]{tcolorbox}
+	\tcbsetforeverylayer
+		{colback=cyan!10!white,
+		 colframe=cyan!75!black,
+		 arc=0pt,
+		 outer arc=0pt
+		}
+	\newtcolorbox{codebox}[1][Code]
+		{colback=black!5!white,
+		 colframe=blue!40!black,
+		 title=#1,
+		 leftupper=6mm
+		}
+	\newtcolorbox{cmdbox}[1][Command Line]
+		{colback=black,
+		 coltext=white,
+		 fontupper=\ttfamily ,
+		 colframe=blue!40!black,
+		 title=#1,
+		 outer arc=0pt
+		}
+	\newtcolorbox{warnbox}[1][Warning]
+		{colback=black!5!white,
+		 colframe=red!40!black,
+		 title=#1
+		}
+	\newtcolorbox{hintbox}[1][Hint]
+		{colback=black!5!white,
+		 colframe=green!40!black,
+		 title=#1
+		}
+	\newtcolorbox{defbox}[1][Code]
+		{colback=cyan!10!white,
+		 colframe=cyan!90!black,
+		 title=#1
+		}
+%==============================================================================%
+% GLOBAL MACROS
+
+\newcommand*{\zB}{e.\,g. }
+\newcommand*{\ie}{i.\,e. }
+
+\newcommand{\Thus}{\ensuremath{\Rightarrow}\xspace}
+\newcommand{\thus}{\ensuremath{\rightarrow}\xspace}
+
+\newcommand*{\tabcrlf}{\\ \midrule}			% actually still allows for optional argument
+
+\newcommand*{\inPy}[1]{\mintinline{python}{#1}}
+
+\newcommand*{\todo}[1]{{\color{red}TODO: #1}}
+\newcommand*{\sfrac}[2]{\ensuremath{{}^{#1}/_{#2}}}
+
+% =========================================================================== %
+
+\author{Stefan Hartinger}
+\title{Python for Scientists}
+\subtitle{Part 10: Handling Constants and Parameters}
+\institute{Department of Just Some Dude Who Likes to Talk}
+\date{Spring 2023}
+
+% =========================================================================== %
+
+\begin{document}
+\include{10_content}
+\end{document}
+
+% MAREI!!
+% whom do I give credit? Where?
