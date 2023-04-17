@@ -21,7 +21,7 @@
 \item Hobby enthusiast since childhood
 	\begin{itemize}
 	\item First programming language (BASIC) when I was 9 years old
-	\item So almost 25 years of semi-professional busying myself with computers
+	\item 25 years of semi-professional busying myself with computers
 	\item I like sharing nerdy stuff in spite of my limited time
 	\end{itemize}
 \end{itemize}
@@ -64,7 +64,7 @@
 \item So interaction/feedback is greatly appreciated
 	\begin{itemize}
 	\item Preferably direct
-	\item Also: Email (\todo{put my email address here})
+	\item Also: Email to \href{mailto:stefan.hartinger@ur.de}{stefan.hartinger@ur.de}
 	\end{itemize}
 \item All media (codes, slides, ...) provided online
 	\begin{itemize}
@@ -92,9 +92,9 @@
 	\item A means to install Python packages
 		\begin{itemize}
 		\item E.\;g. \texttt{pip}, \texttt{conda}, \texttt{venv}, ...
-		\item Just ask me after the presentation if you are unsure
+		\item Just ask me after the lecture if you are unsure
 		\end{itemize}
-	\item Packages \texttt{numpy} and \texttt{matplotlib}
+	\item At least Packages \texttt{numpy} and \texttt{matplotlib}, later on also \texttt{scipy}, \texttt{pandas}, ...
 	\item Some IDE
 		\begin{itemize}
 		\item \textbf{PyCharm} (Community Edition) -- my recommendation\\
@@ -111,33 +111,35 @@
 
 % =========================================================================== %
 
-\begin{frame}{The First Few Sessions (Recommendation)}
+\begin{frame}{If You \emph{Don't} Ask For Anything Specific ...}
 %
 \begin{itemize}
-\item Today
+\item Session 1 (Today)
 	\begin{itemize}
-	\item Project structure: Classes and Modules
+	\item Project structure: classes and modules
 	\item Discussing example simulation: non-interacting particles in a potential
 	\end{itemize}
-\item Next time
+\item Session 2 (2023-05-23)
 	\begin{itemize}
-	\item Discussing efficiency -- Big O Notation
-	\item How numpy makes Python fast (by not being Python)
+	\item Introduction to metaprogramming
+	\item Self-altering code, decorators and Python under the hood
 	\end{itemize}
-\item Later On
+\item Session 3 (2023-05-30)
 	\begin{itemize}
-	\item SciPy: Integration, Fourier Analysis, Curve Fitting, ODEs and PDEs
-	\item Python Concepts: Iterators, Decorators, Magic Methods, Type Annotations
-	\item IT concepts: Unit Tests, Git Repositories, Automated Documentation
-	\item Pandas -- Queries on data frames
-	\item Parallelization -- using multiple processors at once
-	\item ...
+	\item Iterators and the lazy evaluation paradigm
+	\item More poking around in the guts of Python
+	\end{itemize}
+\item Session 4 (2023-06-05)
+	\begin{itemize}
+	\item Parallelism and multiprocessing
+	\item Generic and Python-specific aspects of parallel programming
+	\end{itemize}
+\item And beyond
+	\begin{itemize}
+	\item If enough of you are interested, every Tuesday
+	\item I've got ideas, but maybe so do you
 	\end{itemize}
 \end{itemize}
-%
-\begin{center}
-\emph{... unless you ask me to do something else}
-\end{center}
 %
 \end{frame}
 
@@ -203,8 +205,8 @@
 \item Essentially: fancy \inPy{dict}s
 \item Allows to separate (abstract away) \emph{intent} from \emph{implementation}
 	\begin{itemize}
-	\item Intent: Method names, \zB \texttt{Potential.get\_force(coordinates)}
-	\item Implementation: How is the potential stored in the first place? What data types do I use? Runtime concerns; Failsafes; ...
+	\item Intent: Method names, \zB \texttt{potential.get\_force(coordinates)}
+	\item Implementation: How is the potential stored in the first place? How do I get a force from that? What data types do I use? Efficiency considerations; Failsafes; ...
 	\end{itemize}
 \item Write \emph{interfaces} first, then go about implementing them
 	\begin{itemize}
@@ -273,6 +275,7 @@ Example \inPy{class Particle}:
 	\end{itemize}
 \item[\Thus] Generalize only if necessary or \emph{very easy}
 	\begin{itemize}
+	\item In doubt, start with specialized code
 	\item Rewriting a \emph{correctly working} piece of code is often difficult enough
 	\item Failsafe/easy to use code is worth more than generic code
 	\end{itemize}
@@ -285,14 +288,14 @@ Example \inPy{class Particle}:
 \begin{frame}{Classes: Order of Implementation}
 %
 \begin{itemize}
-\item (Begin with the interface, maybe only on paper)
+\item Begin with the interface, best as a sketch on paper
 \item Write the \inPy{__init__} first
 	\begin{itemize}
 	\item Which attributes do describe your object?
 	\item Which data type and grouping is best suited for this task?
 	\item Parameters to the constructor. Again, need not mirror the inner structure.
 	\item Example: \texttt{Particle(position, velocity, mass)} (3 parameters). Internally represented by one member (\texttt{data}), which stores five numbers
-	\item Thik about default parameters and validity checks
+	\item Think about default parameters and validity checks
 		\begin{itemize}
 		\item What if a user accidentally provides a string for either of them?\\
 			Usually, just \inPy{raise} an Exception \emph{with meaningful text}
@@ -315,17 +318,19 @@ Example \inPy{class Particle}:
 \begin{itemize}
 \item Getters and Setters
 	\begin{itemize}
-	\item Pattern: attribute \texttt{X} has associated methods \texttt{get\_X(self)} and \texttt{set\_X(self, new\_value)}
+	\item Pattern: attribute \texttt{X} has associated methods \texttt{get\_X(self)} and \\
+		\texttt{set\_X(self, new\_value)}
 	\item Read-only attributes: no setter
 	\item Implement, even if trivial
 		\begin{itemize}
 		\item Trivial getter: \inPy{return self.X}; trivial setter: \inPy{self.X = new_value}
 		\item[\Thus] Uniform access for all attributes via getter/setter; later edits affect \emph{all} access points
+		\item (Actually a matter of taste; some Pythonistas advocate direct member access)
 		\end{itemize}
 	\end{itemize}
 \item Private attributes and methods begin with underscore
 	\begin{itemize}
-	\item Many OO languages: private and public members: Acessible only from within class code or from everywhere
+	\item Many OO languages: private and public members: Accessible only from within class code or from everywhere
 	\item[\Thus] Prevent coder from accidentally creating an invalid state
 	\item Python: no such concept. (Poor) substitute: naming convention
 	\item Message to coder: this is for internal use only. Touch at your own risk
@@ -349,13 +354,17 @@ Example \inPy{class Particle}:
 	\end{itemize}
 \item Method names are verbs, class names are nouns
 	\begin{itemize}
-	\item Classes model concepts from the physical world \Thus nouns
-	\item Methods model what we can do with them \Thus verbs
+	\item Classes model concepts from the physical world \Thus nouns (in \texttt{CamelCase})
+	\item Methods model what we can do with them \Thus verbs (in \texttt{snake\_case})
+	\item Capitalize class names, set method names and variables in lower case
+	\item Constants should be \texttt{ALL\_CAPS}
+	\item Official style guide: \url{https://peps.python.org/pep-0008/}
 	\end{itemize}
 \item Similar names do similar things (and vice versa!)
 	\begin{itemize}
-	\item Methods named \texttt{get\_something} should only compute/fetch and return \texttt{something}, without having side effects (changing memory state, producing on-screen output, ...)
 	\item If one class has a method \texttt{draw\_something} to create a plot, then another class should not implement a method \texttt{plot\_something}
+	\item Methods named \texttt{get\_something} should only compute/fetch and return \texttt{something}, 
+		without having \emph{side effects} (changing memory state, producing on-screen output, ...)
 	\end{itemize}
 \end{itemize}
 %
@@ -366,10 +375,10 @@ Example \inPy{class Particle}:
 \begin{frame}{Class Methods: Patterns}
 %
 \begin{itemize}
-\item Setters and state changing classes: monadic design
+\item Setters and state changing classes: \emph{monadic} design
 	\begin{itemize}
 	\item Make change-methods \enquote{joinable}
-	\item \texttt{myObject.change\_property\_A().change\_property\_A()}
+	\item \texttt{myObject.change\_property\_A().change\_property\_B()}
 	\item Simply end method code with \inPy{return self}
 	\end{itemize}
 \end{itemize}
@@ -394,10 +403,10 @@ A Sensible Introduction to Category Theory\\
 %
 \begin{itemize}
 \item Classes themselves: bottom up
-\item I.\;e. the "atomic" classes (the elements of composed systems first
+\item I.\;e. the "atomic" classes (the elements of composed systems) first
 \item If mutual interdependence (A affects B, and B affects A; neither is \enquote{element of} the other):
 	\begin{itemize}
-	\item Avoid if possible, \zB via return values
+	\item Avoid if possible
 	\item Start with whichever is easier on your head
 	\item Usually the one with fewer active side interactions
 	\end{itemize}
@@ -405,7 +414,8 @@ A Sensible Introduction to Category Theory\\
 	\begin{itemize}
 	\item Unittests: Separate program that instantiate your class and use all the methods
 	\item Pass if expected results produced
-	\item Python offers a number of unittest systems \Thus another evening
+	\item Python offers a number of unittest systems \Thus another lecture, if you like
+	\item Self-Study: \url{https://docs.python.org/3/library/unittest.html}
 	\end{itemize}
 \end{itemize}
 %
@@ -426,7 +436,7 @@ A Sensible Introduction to Category Theory\\
 	\end{itemize}
 \item Recommendation: One module per class
 	\begin{itemize}
-	\item Easier to first find the right file out of 20 and then the right method out of 500 lines instead of the right method directly out of 5000 lines of code
+	\item Easier to first find the right file out of 20 and then the right method out of 500 lines instead of the right method directly out of 10\;000 lines of code
 	\end{itemize}
 \item Additional modules for constants and non-class functions
 \item Package mechanism only if you write libraries or have several distinct aspects in your work
@@ -535,8 +545,9 @@ from .Plots.Field import *
 \item \inPy{get_mass(self)} and \inPy{set_mass(self, mass)}
 \item \inPy{get_position(self)} and \inPy{set_position(self, mass)}
 \item \inPy{get_velocity(self)} and \inPy{set_velocity(self, mass)}
-\item \inPy{__getitem__(self, key)} -- forwards to \texttt{get\_X} if \texttt{key} is a string, or accesses underlying numpy array if \inPy{int} or \inPy{slice}
-\item \inPy{__setitem__(self, key, value)} -- analogous
+\item \inPy{__getitem__(self, key)} (resolves \texttt{particle[key]}):
+	forwards to \texttt{get\_X} if \texttt{key} is a string, or accesses underlying numpy array if \inPy{int} or \inPy{slice}
+\item \inPy{__setitem__(self, key, value)} (resolves \texttt{particle[key] = value})
 \item \inPy{__add__(self, rhs)} (computes \texttt{particle + vector}) and \inPy{__iadd__(self, rhs)} (computes \texttt{particle += vector})
 \item \inPy{__str__(self)}
 \end{itemize}
@@ -551,14 +562,14 @@ from .Plots.Field import *
 \begin{defbox}[\texttt{Misc.py} -- Interface]
 \begin{itemize}
 \item \inPy{central_difference_quotient(f, x, epsilon)} -- derivative of \texttt{f} in \texttt{x}
-\item \inPy{bind_all_parameters_but_ith(f, i, coordinates)} -- transform $f(x_1, ... x_n) \to \tilde{f}(x) = f(x_1, ... x_n) |_{x_i = x}$
+\item \inPy{bind_all_parameters_but_ith(f, i, coordinates)} -- transform $f(x_1, ..., x_n) \to \tilde{f}(x) = f(x_1, ..., x_{i-1}, x_{i+1}, ..., x_n) |_{x_i = x}$
 \end{itemize}
 \end{defbox}
 %
 \begin{defbox}[\texttt{Constants.py} -- Interface]
 \begin{itemize}
-\item \texttt{decay} -- form parameter of a decaying oscillation potential used in my example
-\item \texttt{frequency} -- form parameter of a decaying oscillation potential
+\item \texttt{DECAY} -- form parameter of a decaying oscillation potential used in my example
+\item \texttt{FREQUENCY} -- form parameter of a decaying oscillation potential
 \end{itemize}
 \end{defbox}
 %
