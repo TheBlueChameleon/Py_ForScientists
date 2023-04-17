@@ -11,8 +11,8 @@ from Simulation import Simulation
 
 def decaying_oscillation_potential(x, y):
     r = np.sqrt(x * x + y * y)
-    mag = np.exp(-Constants.decay * (r * r))
-    return 2 * mag * np.cos(Constants.frequency * r)
+    mag = np.exp(-Constants.DECAY * (r * r))
+    return 2 * mag * np.cos(Constants.FREQUENCY * r)
 
 
 def setup_simulation():

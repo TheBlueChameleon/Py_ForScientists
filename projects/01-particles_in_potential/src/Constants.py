@@ -1,3 +1,3 @@
 class Constants:
-    decay = 0.1
-    frequency = 3.14
+    DECAY = 0.1
+    FREQUENCY = 3.14
