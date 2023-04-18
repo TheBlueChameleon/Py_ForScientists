@@ -32,8 +32,8 @@ def fib(N):
     return fib(N - 1) + fib(N - 2)
 
 
-@LoggedFunction
 @functools.cache
+@LoggedFunction
 def fib_cached(N):
     if N < 0: return 0
     if N == 0: return 0

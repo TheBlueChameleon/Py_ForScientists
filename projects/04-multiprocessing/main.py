@@ -10,14 +10,14 @@ import Queue
 
 
 def main():
-    # RaceCondition.main()
-    # ContextManager.main()
-    # Haystack.main()
-    # Forkbomb_B.main()
-    # Zombies.main()
-    # SerializabilityPoolFail.main()
-    # TravellingSalesMan.main()
-    # ArraySummation.main()
+    RaceCondition.main()
+    ContextManager.main()
+    Haystack.main()
+    Forkbomb_B.main()
+    Zombies.main()
+    SerializabilityPoolFail.main()
+    TravellingSalesMan.main()
+    ArraySummation.main()
     Queue.main()
 
 

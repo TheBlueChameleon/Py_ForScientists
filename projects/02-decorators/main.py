@@ -5,9 +5,6 @@ import timed_fib
 import ordered_complex
 import partials
 
-def func():
-    pass
-
 if __name__ == '__main__':
     lifetime.main()
     wrapper_functions.main()
@@ -18,9 +15,8 @@ if __name__ == '__main__':
 
 # useful decorators to check out:
 # functools.cache (shown in timed_fib)
-# functools.wraps (used in timed_fib, no particular illustration of effects)
+# functools.wraps (used in timed_fib, discussed in an upcoming lecture on metaprogramming)
 # staticmethod (builtin decorator)
-# singleton (builtin decorator)
 # property (builtin decorator)
 # atexit.register
 # dataclasses.dataclass
