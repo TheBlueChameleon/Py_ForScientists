@@ -29,13 +29,12 @@
 \begin{frame}{Scope For Today}
 %
 \begin{itemize}
-\item Python's object model, again
+\item Symbol binding
 	\begin{itemize}
-	\item Symbol Binding
-	\item Reference Counting
-	\item Lifetime of Objects
-	\item Mutable and Immutable Objects
-	\item Object Dictionaries
+	\item Reference counting
+	\item Lifetime of objects
+	\item Mutable and immutable objects
+	\item Object dictionaries
 	\end{itemize}
 \item Self-modifying code
 	\begin{itemize}
@@ -61,8 +60,7 @@
 \item Memory: Long string of one-byte cells
 	\begin{itemize}
 	\item Enumerated (\enquote{addresses})
-	\item Can be grouped into bigger units (\Thus \zB 8 Byte per floating point number)
-	\item Only one context
+	\item Can be grouped into bigger units (\Thus \zB 8 byte per floating point number)
 	\item Managed by Python RTS and operating system
 	\end{itemize}
 \item Code: variable names, aka symbols
@@ -299,7 +297,7 @@ array = [1]
 	\begin{itemize}
 	\item primitive data types: \inPy{bool}s, \inPy{int}s, \inPy{float}s, \inPy{complex}s and \inPy{str}ings
 	\item very few containers: \inPy{tuple}s, \inPy{frozenset}s and \inPy{bytes}
-	\item some importable objects like \texttt{frozendict}s
+	\item some \inPy{import}able objects like \texttt{frozendict}s
 	\item functions and modules
 	\end{itemize}
 \item Mutables are ...
@@ -325,7 +323,7 @@ array = [1]
 	\item If it can't change, it can safely be shared between objects
 	\item All the inner workings of Python, \texttt{sys}, \texttt{numpy}, ... share the same \inPy{1}
 	\end{itemize}
-\item Reason 2: Python pre-allocates often-used objects to safe time in the long run
+\item Reason 2: Python pre-allocates often-used objects to save time in the long run
 	\begin{columns}
 	\column{.4\linewidth}
 \begin{minted}[fontsize=\footnotesize]{python3}
@@ -565,17 +563,17 @@ def function(...):
 	\end{itemize}
 \item The decorator must itself be \emph{any} callable
 	\begin{itemize}
-	\item Can also be a class
+	\item Can also be a \inPy{class}
 	\item The dunder \inPy{__init__} then acts as the decorator
 	\end{itemize}
-\item The number of arguments needs not match that of the original function
+\item Number of arguments of returned object needs not match that of original function
 	\begin{itemize}
 	\item E.\;g. it is possible to hide parameters or fill in defaults
 	\item \texttt{functools.partial} does exactly that
 	\end{itemize}
 \item There are some meta-properties that naive decorators mess up
 	\begin{itemize}
-	\item We haven't discussed them yet
+	\item We haven't discussed them yet \Thus another lecture
 	\item \texttt{functools.wraps} circumvents this problem
 	\end{itemize}
 \end{itemize}
@@ -744,11 +742,11 @@ This exponentially accumulates computation overhead!
 \begin{frame}[fragile]
 %
 \begin{columns}
-\column{.45\linewidth}
+\column{.42\linewidth}
 \begin{codebox}[Cached Fibonacci, equal height group=cachedFib]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
-@LoggedFunction
 @functools.cache
+@LoggedFunction
 def fib_cached(N):
     if N  < 0: return 0
     if N == 0: return 0
@@ -757,7 +755,7 @@ def fib_cached(N):
            fib_cached(N - 2)
 
 print("### CACHED FIB")
-print(fib_cached(3))
+print(fib_cached(5))
 
 print("### PRECOMPUTED " +
       "INTERMEDIATE RESULT")
@@ -765,20 +763,22 @@ print(fib_cached(2))
 \end{minted}
 \end{codebox}
 %
-\column{.55\linewidth}
+\column{.57\linewidth}
 \begin{cmdbox}[Output: Cached Fibonacci, equal height group=cachedFib]
 \begin{minted}[fontsize=\scriptsize]{text}
- calling fib_cached with arguments (3,) {}
-   calling fib_cached with arguments (2,) {}
-     calling fib_cached with arguments (1,) {}
-     returning from fib_cached with result 1
-     calling fib_cached with arguments (0,) {}
-     returning from fib_cached with result 0
-   returning from fib_cached with result 1
-   calling fib_cached with arguments (1,) {}
-   returning from fib_cached with result 1
- returning from fib_cached with result 2
-2
+calling fib_cached with arguments (5,) {}
+  calling fib_cached with arguments (4,) {}
+    calling fib_cached with arguments (3,) {}
+      calling fib_cached with arguments (2,) {}
+        calling fib_cached with arguments (1,) {}
+        returning from fib_cached with result 1
+        calling fib_cached with arguments (0,) {}
+        returning from fib_cached with result 0
+      returning from fib_cached with result 1
+    returning from fib_cached with result 2
+  returning from fib_cached with result 3
+returning from fib_cached with result 5
+5
 
 ### PRECOMPUTED INTERMEDIATE RESULT
  calling fib_cached with arguments (2,) {}
@@ -787,8 +787,6 @@ print(fib_cached(2))
 \end{minted}
 \end{cmdbox}
 \end{columns}
-%
-(Calls are still invoked, but actual computation happes only for uncached values.)
 %
 \end{frame}
 
@@ -804,6 +802,9 @@ def fib(N):
     if N == 1: return 1
     return fib(N - 1) + fib(N - 2)
 
+simple_fib = timed(fib)
+pseudo_cached_fib = timed(functools.cache(fib))
+
 @functools.cache
 def fib_cached(N):
     if N  < 0: return 0
@@ -811,9 +812,6 @@ def fib_cached(N):
     if N == 1: return 1
     return fib_cached(N - 1) + fib_cached(N - 2)
 
-
-simple_fib = timed(fib)
-pseudo_cached_fib = timed(functools.cache(fib))
 correctly_cached_fib = timed(fib_cached)
 \end{minted}
 \end{codebox}
