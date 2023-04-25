@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import typing
 
-# ==================================================================================================================== #
-class Node:
-    def __init__(self, content):
-        self.content = content
-        self.parent = None
-        self.sub_nodes = []
+T = typing.TypeVar('T')
+Index_T = typing.Union[int, tuple[int]]
 
-    def __getitem__(self, index):
+
+# ==================================================================================================================== #
+class Node(typing.Generic[T]):
+    def __init__(self, content: T) -> None:
+        self.content: T = content
+        self.parent: typing.Optional[Node] = None
+        self.sub_nodes: list[Node] = []
+
+    def __getitem__(self, index: Index_T) -> Node:
         if type(index) == int:
             return self.sub_nodes[index]
         elif type(index) == tuple:
@@ -18,7 +22,7 @@ class Node:
                 result = result[index_part]
             return result
 
-    def __setitem__(self, index, value):
+    def __setitem__(self, index: Index_T, value: T) -> None:
         if type(index) == int:
             self.sub_nodes[index].content = value
         elif type(index) == tuple:
@@ -27,16 +31,16 @@ class Node:
                 node = node[index_part]
             node.content = value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.content)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Node(content={self.content}, sub_nodes={list(repr(sub_node) for sub_node in self.sub_nodes)})"
 
-    def __iter__(self):
+    def __iter__(self) -> NodeIterator:
         return NodeIterator(self)
 
-    def check_index(self, index):
+    def check_index(self, index: int) -> None:
         if type(index) != int:
             raise TypeError("Index must be of type int!")
 
@@ -44,7 +48,7 @@ class Node:
         if not (-(n_sub_nodes + 1) <= index <= n_sub_nodes):
             raise IndexError("Index out of bounds!")
 
-    def add_node(self, value, index = None):
+    def add_node(self, value: T, index: int = None) -> Node:
         # the optional argument index specifies where to add the new node.
         # it will be added *before* index, and allows negative indices, as with lists.
         # If set to none, the new item will be added to the back of the list.
@@ -70,9 +74,9 @@ class Node:
 # ==================================================================================================================== #
 class NodeIterator(typing.Iterator):
     def __init__(self, tree) -> None:
-        self.tree = tree
-        self.current_node = tree
-        self.indices = None
+        self.tree: Node = tree
+        self.current_node: Node = tree
+        self.indices: list[int] = None
 
     def advance_indices(self):
         current_index = self.indices[-1]
@@ -80,7 +84,7 @@ class NodeIterator(typing.Iterator):
         if len(self.current_node.sub_nodes) > 0:
             self.indices.append(0)
         else:
-            resolved = False
+            resolved: bool = False
             while not resolved:
                 if current_index + 1 < len(self.current_node.parent.sub_nodes):
                     self.indices[-1] += 1
@@ -111,7 +115,7 @@ class NodeIterator(typing.Iterator):
 
 # ==================================================================================================================== #
 
-def build_tree():
+def build_tree() -> Node:
     print("Building the tree ... ", end="")
 
     subfolders = [
@@ -149,7 +153,7 @@ def build_tree():
     return root
 
 
-def add_substructure(root, substructure):
+def add_substructure(root: Node, substructure: tuple[str, list]) -> None:
     content = substructure[0]
     children = substructure[1]
 
