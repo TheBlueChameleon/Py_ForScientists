@@ -263,14 +263,46 @@ for num in Collatz(9):
 
 % =========================================================================== %
 
-\begin{frame}
+\begin{frame}{To Put It In A Nutshell ...}
 %
-\begin{hintbox}[Consuming Iteration]
-The above example \emph{changes the state} of the iterable in each iteration. In other words, the iterable is consumed, it can only be used once. This is not uncommon, as it is computationally cheap to (re)create a fresh iterable, and this single-use approach spares the effort of using a lot of memory.
-\end{hintbox}
+\begin{itemize}
+\item The Iterable
+	\begin{itemize}
+	\item Is instance of a (user defined) \inPy{class}
+	\item Defines at least a method \inPy{__iter__} which returns an iterator
+	\end{itemize}
+\item The Iterator
+	\begin{itemize}
+	\item Is instance of a (user defined) \inPy{class}, too
+	\item Can be distinct from or integrated in the iterable
+	\item Knows about the iterable if distinct
+	\item Defines a method \inPy{__next__}
+		\begin{itemize}
+		\item Usually updates book keeping variables within the iterator instance
+		\item Returns whichever is the next element of the iterable
+		\item May change the iterable itself (\Thus \emph{consuming iteration})
+		\item \inPy{raise}s \texttt{StopIteration} when last element has been emitted
+		\end{itemize}
+	\end{itemize}
+\item Consuming Iteration
+	\begin{itemize}
+	\item After Iteration, data cannot be reproduced
+	\item Useful, if single use anyway and memory consumption of greater concern
+	\item Enables \emph{infinite} sequences, \zB´ all (even) integers, primes, ...
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}
 %
 \begin{hintbox}[Example: Tree Structure]
 See GRIPS for a more involved example that shows how to build and store a tree structure (on the example of a file system) and how to iterate over the tree.
+
+\vspace{6pt}
+The tree itself is modelled as (something like) nested lists. Note how a single index won't do in this case -- you need to give list indices for each level. So the \enquote{magic} here lies in correctly updating the indices.
 
 \vspace{6pt}
 True to the nature of a tree as a \emph{self similar structure}, this example also helps you to refresh your skills in \emph{recursive algorithms}.
@@ -335,8 +367,11 @@ When implementing a consumable sequence, \inPy{yield} allows to focus on the int
 %
 \begin{itemize}
 \item For particularly simple/regular sequences: short syntax
-\item \inPy{generator = (expression(variable) for variable in iterable)}\\
-	expands to
+	\begin{codebox}[]
+	\footnotesize
+	\inPy{generator = (expression(variable) for variable in iterable)}
+	\end{codebox}
+\item expands to
 \begin{codebox}[]
 \begin{minted}[fontsize=\footnotesize, linenos]{python3}
 def hidden_function():
@@ -345,12 +380,20 @@ def hidden_function():
 generator = hidden_function()
 \end{minted}
 \end{codebox}
+\item[\Thus] key characteristics: parenthesis and \inPy{for}
 \end{itemize}
 %
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}
+
 \begin{hintbox}[Tuple Comprehensions]
-\small
 Other than \inPy{list}s and \inPy{dict}s, tuples cannot be generated from comprehensions \emph{directly}. However, you can put any \emph{iterable} into the \inPy{tuple} constructor.\\
-Generator comprehensions are iterables.\\
+Generator comprehensions are iterables.
+
+\vspace{6pt}
 \Thus \inPy{tuple(expression(variable) for variable in iterable))}
 \end{hintbox}
 %
@@ -382,7 +425,7 @@ Due to Python's object model (\inPy{list}s, \inPy{set}s etc. only contain refere
 
 \begin{frame}[fragile]
 %
-\begin{codebox}[foo]
+\begin{codebox}[Invalidated Iterators]
 \begin{minted}[fontsize=\footnotesize, linenos]{python3}
 data = [2, 3, 5, 7, 8, 10, 11]
 
@@ -411,8 +454,6 @@ except RuntimeError as e:
 
 \begin{frame}[fragile]{Paradigm: Functional Programming}
 %
-\begin{columns}[T]
-\column{.7\linewidth}
 \begin{itemize}
 \item Observation: humans are bad at tracking dependencies
 	\begin{itemize}
@@ -435,13 +476,6 @@ except RuntimeError as e:
 	\item Some neat tricks with iterators
 	\end{itemize}
 \end{itemize}
-%
-\column{.27\linewidth}
-\begin{hintbox}[Haskell]
-\small
-If you meet someone who is into Haskell: Just say \href{https://youtu.be/H0Ek86IH-3Y}{\emph{A monoid is a monad in the space of endofunctors}} and go away. What they have to tell you won't give you any more fun than the phrase above.
-\end{hintbox}
-\end{columns}
 %
 \end{frame}
 
@@ -486,7 +520,7 @@ If you meet someone who is into Haskell: Just say \href{https://youtu.be/H0Ek86I
 	\item Does no other point in the code need the list elements any longer?
 	\item Do we need to update a list-length variable or the like?
 	\end{itemize}
-\item Non-Functional Approach 2: Copy all non-primes into a new list, then compute $f(x)$ for each element in the new list
+\item Non-Functional Approach 2: Copy all primes into a new list, then compute $f(x)$ for each element in the new list
 	\begin{itemize}
 	\item Possibly a lot of copying
 	\item What happens to the new list after we're done with it? Any maintained references?
@@ -562,16 +596,16 @@ For \emph{simple} examples, it is often clearer readable to use the comprehensio
 \begin{minted}[fontsize=\footnotesize, linenos]{python3}
 import time
 
-say_A = lambda: print("A"); True
-say_B = lambda: print("B"); True
+def say_A: print("A"); return True
+def say_B: print("B"); return True
 
 if say_A() or say_B(): pass    # only prints A
 
 a, b = say_A(), say_B()        # prints A and B
 if a or b: pass
 
-quick_to_evaluate = lambda: False
-slow_to_evaluate = lambda: time.sleep(2); False
+def quick_to_evaluate: return False
+def slow_to_evaluate: time.sleep(2); return False
 
 if slow_to_evaluate() and quick_to_evaluate(): pass   # takes 2 seconds
 else: print("Wasted time by failing to leverage short circuiting")
@@ -592,8 +626,8 @@ else: print("Got the same result way faster")
 \item General purpose and combinatoric functions
 \item See \url{https://docs.python.org/3/library/itertools.html}
 \item Some of them seem to do the same as other existing functions/concepts, but there always are subtle differences
-\item Takes some time to get used to them, but
-\item if you know what the module provides, you get stuff done much faster
+\item Takes some time to get used to them, but ...
+\item ... if you know what the module provides, you get stuff done much faster
 \end{itemize}
 %
 \begin{hintbox}[Like Lego Bricks]
@@ -675,6 +709,7 @@ The strength in the itertools module is that all its functions work together. Th
 	\begin{itemize}
 	\item Takes three parameters: reducing function, iterable and initial value
 	\item Reducing function: two parameters: \texttt{accumulator} and \texttt{next\_value}
+	\item Returns updated \texttt{accumulator}
 	\item E.\;g.: \inPy{array_product = lambda acc, nxt: acc * nxt}
 	\item \inPy{twenty_four = functools.reduce(array_product, [1, 2, 3, 4], 1)}
 	\end{itemize}

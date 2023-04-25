@@ -270,6 +270,36 @@ In practice, this difference has little impact (in Python) since we can (and sho
 
 % =========================================================================== %
 
+\begin{frame}[fragile]{Tangent: Name Guard}
+%
+\begin{itemize}
+\item Concept: active module guard
+\item Implicit variable \inPy{__name__}
+	\begin{itemize}
+	\item \inPy{str}ing which normally contains name of current module ... \\
+		\quad (file: \texttt{myPythonModule.py} \thus \inPy{__name__ == "myPythonModule"})
+	\item ... except if the module was not \inPy{import}ed but executed directly
+	\item In the latter case: \inPy{__name__ == "__main__"})
+	\end{itemize}
+\item Often used to separate setup-code from test code
+\end{itemize}
+%
+\begin{codebox}[Example: library.py]
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+someConstant = 1337
+
+def someUsefulFunction (parameters)
+    ...
+
+if __name__ == "__main__":
+    executeAllFunctionsForTesting()
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}[fragile]{Let's Get It Started}
 %
 \begin{itemize}
@@ -277,11 +307,10 @@ In practice, this difference has little impact (in Python) since we can (and sho
 \item \inPy{import multiprocessing as mp}
 \item Keep your module level code in a \inPy{__name__} guard:
 	\begin{itemize}
-	\item \inPy{if __name__ == "__main__": ...}
-	\item Otherwise, spawned processes will go through these lines, too, and probably cause trouble
-	\item Name of subprocess will be module name (\ie depend on file name)
+	\item Otherwise, spawned processes will go through these lines, too \Thus trouble
+	\item \inPy{__name__} of subprocess will be module name (\ie as if \inPy{import}ed)
 	\end{itemize}
-\item Write a normal function \inPy{def subprocess(...)}
+\item Write a normal function: \inPy{def subprocess(...)}
 	\begin{itemize}
 	\item This function will run as its own process
 	\item When the function terminates, the child process is done
@@ -296,6 +325,29 @@ In practice, this difference has little impact (in Python) since we can (and sho
 \item Make sure the parent process waits for all child processes to finish
 	\begin{itemize}
 	\item \texttt{process.join()}
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Tangent: Zombie Processes and Orphans}
+%
+\emph{What happens if we don't \texttt{join}} a process?
+
+\vspace{6pt}
+\begin{itemize}
+\item Case 1: child process terminates before parent
+	\begin{itemize}
+	\item Used ressources are not freed at the earliest moment possible
+	\item \emph{Zombie-Process}
+	\item Operating Sytem \emph{eventually} takes care of that
+	\end{itemize}
+\item Case 2: parent process terminates before child
+	\begin{itemize}
+	\item All children die with parent process, \emph{instantly}
+	\item Error Message about \emph{Orphaned Processes}
 	\end{itemize}
 \end{itemize}
 %
@@ -445,6 +497,10 @@ Time elapsed: 1.0793380737304688 seconds
 \begin{frame}{Inter-Process Variables and Atomic Operations}
 %
 \begin{itemize}
+\item Simplest method: shared memory
+	\begin{itemize}
+	\item Processes normally not allowed to directly access other memory pages than their own
+	\end{itemize}
 \item Race Condition
 	\begin{itemize}
 	\item Two or more processes attempt to access the same resource in parallel
@@ -476,7 +532,7 @@ Time elapsed: 1.0793380737304688 seconds
 \vspace{-6pt}
 \begin{itemize}
 \item Idea: automatic cleanup after working with a variable
-\item Example: \texttt{f = open("file", "r")} requires \texttt{f.close()}
+\item Example: \inPy{f = open("file", "r")} requires \texttt{f.close()}
 \item \inPy{with expr as var} statement
 	\begin{itemize}
 	\item Evaluates \texttt{expr}
@@ -588,10 +644,11 @@ Leaving context of Foo
 	\end{itemize}
 \end{itemize}
 %
-\begin{warnbox}[Cross-Process Communication Is Expensive]
+\begin{hintbox}[Speed]
 \small
-Apart from potential waiting time due to waiting on mutexes, cross-process variables cause significant overhead. Use them sparingly! Instead, try to provide all input data via the parameters and only communicate return values via Inter-Process variables.
-\end{warnbox}
+While shared memory is in principle the fastest communication method, frequently waiting for Mutexes can chip away at that advantage.\\
+We'll see other, more convenient methods (with more overhead) in a couple of slides.
+\end{hintbox}
 %
 \end{frame}
 
@@ -601,7 +658,7 @@ Apart from potential waiting time due to waiting on mutexes, cross-process varia
 %
 \begin{codebox}[Example: Parallel Summation]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
-def sum_slice(data, start, stop, total: mp.Value):
+def sum_slice(data, start, stop, total):
     partial_sum = sum(data[start:stop])
     with total.get_lock():
         total.value += partial_sum
@@ -840,8 +897,8 @@ if __name__ == "__main__":
     pool.join()
     
     for prime, number in zip(prime_indicator, numbers):
-        if prime:
-            print(number)
+        if prime: print(number)
+    # for number in (number for prime, number in zip(prime_indicator, numbers) if prime):
 \end{minted}
 \end{codebox}
 %
