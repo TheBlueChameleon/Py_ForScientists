@@ -294,6 +294,7 @@ tic = time.perf_counter()
 for repetition in range(N):
     do_things()
 toc = time.perf_counter()
+
 runtime = (toc - tic) / N
 \end{minted}
 \end{codebox}
@@ -384,11 +385,11 @@ In Python, even \inPy{class}es and modules are \inPy{object}s. So \inPy{isinstan
 \item \texttt{some\_list} refers to an \inPy{object}
 \item Read the type of \texttt{some\_list} to find out it's a \inPy{list}
 \item Read the data pointer of \texttt{some\_list} to find it's contents
-\item Exectute the \texttt{\_\_getItem\_\_} method of \inPy{list} (because of \texttt{some\_list[index]})
-\item \texttt{index} is an object. Read type and data pointer, too
-\item Get the stored element -- an \inPy{object}. Read type and data pointer; execute \texttt{\_\_add\_\_}
+\item Exectute the \inPy{__getItem__} method of \inPy{list} (because of \texttt{some\_list[index]})
+\item \texttt{index} is an \inPy{object}. Read type and data pointer, too
+\item Get the stored element -- an \inPy{object}. Read type and data pointer; execute \inPy{__iadd__}
 \item \inPy{5} is an object. Read type and data pointer.
-\item Write the sum back to memory by calling \texttt{\_\_setItem\_\_}
+\item Write the sum back to memory by calling \inPy{__setItem__}
 \end{itemize}
 %
 \end{frame}
@@ -464,9 +465,9 @@ This kind of behaviour avoids copying long lists and replaces the tedious step b
 \begin{frame}[fragile]{The Weak Points of Python: Iterators}
 %
 \begin{itemize}
-\item Iterator: \enquote{Book keeping device}, stores how to find the next object in a loop
+\item Remember: Iterator -- \enquote{Book keeping device}, stores how to find next object in loop
 	\begin{itemize}
-	\item Details: own lecture (if desired)
+	\item Details: see Part 3 of this series
 	\end{itemize}
 \item Iterators are objects ...
 \item ... with their own methods ...
@@ -476,57 +477,6 @@ This kind of behaviour avoids copying long lists and replaces the tedious step b
 %
 \begin{hintbox}[Where this helps]
 Iterators provide a uniform interface for traversing arbitrary structures, such as \inPy{dict}s (Hashmaps), \inPy{set}s (Red-Black-Trees), \inPy{list}s (Arrays) and even self-defined structures.
-\end{hintbox}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]{Tangent: Iterators}
-%
-\vspace{-4pt}
-\begin{tcbraster}[raster columns=2,
-                  raster equal height,
-                  nobeforeafter,
-                  raster column skip=0.2cm]
-%
-\begin{codebox}[Iterator.py]
-\begin{minted}[linenos,fontsize=\scriptsize]{python3}
-data = [1, 2, 3, 4, 5]
-iterator = iter(data)
-print("iterator itself:", iterator)
-print("first next:", next(iterator))
-print("second next:", next(iterator))
-print("dunder next:",
-    iterator.__next__())
-for i in iterator :
-    print(i)
-\end{minted}
-\end{codebox}
-%
-\begin{cmdbox}[Output: Iterator.py]
-\begin{minted}[fontsize=\scriptsize]{text}
-iterator itself: <list_iterator object 
-    at 0x7f2a9c032b30>
-first next: 1
-second next: 2
-dunder next: 3
-4
-5
-
-\end{minted}
-\end{cmdbox}
-%
-\end{tcbraster}
-%
-\vspace{-4pt}
-\begin{hintbox}[The main Takeaway]
-\scriptsize
-\begin{itemize}
-\item Using \inPy{for} always generates an iterator
-\item An iterator has the dunder \inPy{__next__} which finds the next object for the loop
-\item The mechanism brings flexibility, but adds a lot of overhead
-\end{itemize}
 \end{hintbox}
 %
 \end{frame}
