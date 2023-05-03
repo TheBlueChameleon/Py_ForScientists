@@ -1,6 +1,7 @@
 **/__pycache__/*
 **/venv/*
 **/.idea/*
+**/*.zip
 
 **/a.out
 
