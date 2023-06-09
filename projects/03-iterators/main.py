@@ -9,13 +9,13 @@ import Tree
 
 
 def main():
-    CollatzClass.main()
-    CollatsGenerator.main()
-    Tree.main()
-    IteratorModifyFail.main()
-    ShortCircuit.main()
-    SweetsBudgetIterators.main()
-    SweetsBudgetNumpy.main()
+    # CollatzClass.main()
+    # CollatsGenerator.main()
+    # Tree.main()
+    # IteratorModifyFail.main()
+    # ShortCircuit.main()
+    # SweetsBudgetIterators.main()
+    # SweetsBudgetNumpy.main()
     TravellingSalesMan.main()
 
 

@@ -54,7 +54,8 @@ def print_result_line(result, category):
                               runtime=result[1] * 1000))
 
 # ==================================================================================================================== #
-# summation in test
+# summation
+# all of these functions compute the sum of an array of integers
 
 @timed
 def sum_naive():
@@ -80,6 +81,8 @@ def sum_expression():
     return correct_sum(N_sum)
 
 # -------------------------------------------------------------------------------------------------------------------- #
+# integration
+# all of these compute the integral from 0 to pi over sin(t) dt
 
 @timed
 def integral_naive(dt):
@@ -107,6 +110,8 @@ def integral_expression():
     return correct_integral(upper_bound_integral)
 
 # ==================================================================================================================== #
+# building a list
+# all of these functions create a list of integers with values 0..N_list
 
 @timed
 def list_comprehension():
@@ -131,6 +136,8 @@ def list_numpy_append():
     return result
 
 # ==================================================================================================================== #
+# count test
+# all of these count how often a search term appears in a list of integers
 
 @timed
 def count_naive(data, search):

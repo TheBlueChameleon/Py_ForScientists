@@ -63,5 +63,12 @@ if __name__ == '__main__':
     stats.sort_stats(pstats.SortKey.TIME)
     stats.print_stats()
 
+    print(pr)
+    print(dir(pr))
+    pr.print_stats()
+    print(pr.stats)
+    pr.create_stats()
+    print(pr.stats)
+
     # a minimal call to the profiler:
     # cProfile.run('run_full()', sort='tottime')

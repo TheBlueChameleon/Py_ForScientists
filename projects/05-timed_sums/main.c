@@ -1,4 +1,4 @@
-// gcc -std=c17 -Wall -Wextra -Wpedantic -mavx512f main.c && ./a.out
+// gcc -std=c17 -Wall -Wextra -Wpedantic -mavx512f -O3 main.c && ./a.out
 
 #include <stdio.h>
 #include <time.h>

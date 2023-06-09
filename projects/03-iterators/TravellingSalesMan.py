@@ -7,7 +7,7 @@
 # one can visit (N-2) cities as third stop, etc.).
 # A number of algorithms have been proposed that do not necessarily produce the best, but a "reasonably good" solution,
 # i.e. one that is in the top 10% of all possible paths, while having a way better runtime.
-# The code below shows both, a brute force implementation of the TSP as well as an approximation based on the following
+# The code below shows both, a brute force implementation of the TSP and an approximation based on the following
 # idea:
 #   The next step in the path is always the city closest to the current one.
 # This works extraordinarily well for small numbers of cities (where the brute force approach would be viable, too), but
@@ -64,7 +64,7 @@ def distance_between(point_a: tuple[float], point_b: tuple[float]) -> float:
 
     :param point_a: coordinates of the first point as an iterable of floats
     :param point_b: coordinates of the second point as an iterable of floats
-    :return: the euclidean distance as a float
+    :return: the Euclidean distance as a float
     """
     return math.sqrt(sum((a - b) ** 2 for a, b in zip(point_a, point_b)))
 
