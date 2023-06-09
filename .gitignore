@@ -4,6 +4,7 @@
 **/*.zip
 
 **/a.out
+**/*.so
 
 
 Concept.pdf

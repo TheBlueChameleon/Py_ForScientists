@@ -41,13 +41,15 @@
 \item Loading C Libraries in Python
 	\begin{itemize}
 	\item Marshalling (Managing data representation)
+	\item Global Variables
 	\item Package-like Modue Loader
-	\item Name mangling or why C++ is different
 	\end{itemize}
 \item Automatization
 	\begin{itemize}
-	\item \todo{foo bar}
+	\item CFFI
+	\item Noteworthy Mentions
 	\end{itemize}
+\item Name mangling or why C++ is different
 \end{itemize}
 %
 \end{frame}
@@ -160,7 +162,7 @@
 \item Pack all object files into an archive
 	\begin{itemize}
 	\item \texttt{ar rcs libLibraryName.a source.o otherSource.o ...}
-	\item Name should always begin with \texttt{lib} and have extension \texttt{.a}
+	\item Name should always begin with \texttt{lib} and have extension \texttt{.a} (Windows: \texttt{.lib})
 	\item \texttt{ar} is a Unix tool (\thus available under Linux and MacOS)
 	\item On Windows, it should be included in MinGW or the WSL.\\
 		Use your search engine of choice if you use a different stack
@@ -170,7 +172,7 @@
 	\item \texttt{gcc projectCode.c projectObject.o \textbf{-lLibraryName -LPath/to/lib}}
 	\item No whitespace between \texttt{-l} and \texttt{LibraryName}; same with \texttt{-L}
 	\item Prefix \texttt{lib} and extension \texttt{.a} is added automatically
-	\item If you don't abide by this name rule, use \texttt{-lFullFileName.a}
+	\item If you don't abide by this name rule, use \texttt{-l:fullFileName.a}
 	\end{itemize}
 \end{itemize}
 %
@@ -184,12 +186,12 @@
 \item Compile/assemble position independent code
 	\begin{itemize}
 	\item \texttt{gcc -c \textbf{-fPIC} source.c -o source.o}
-	\item Otherwise like for the static library
+	\item Just like for the static library, but with flag \texttt{-fPIC}
 	\end{itemize}
 \item Link into a shared library
 	\begin{itemize}
 	\item \texttt{gcc source.o otherSource.o ... \textbf{-shared} -o libLibraryName.so}
-	\item Again, prefer name scheme \texttt{lib<your name here>.so}
+	\item Again, prefer name scheme \texttt{lib<your name here>.so} (or \texttt{.dll} on Windows)
 	\end{itemize}
 \item Use it in your project
 	\begin{itemize}
@@ -234,11 +236,11 @@
 
 % =========================================================================== %
 
-\begin{frame}{Using Shared Libraries in Python}
+\begin{frame}{Using Shared Libraries in Python with the \texttt{ctypes} Module}
 %
 \begin{itemize}
 \item \inPy{import ctypes}
-\item Use \inPy{library = ctypes.CDLL(path_to_lib)} to load the library into memory
+\item \inPy{library = ctypes.CDLL(path_to_lib)} loads the library into memory
 	\begin{itemize}
 	\item This uses functions like \texttt{dlopen} under the hood
 	\item \texttt{library} can now be used as a dict. Keys are your C-function names!
@@ -310,10 +312,10 @@ print(five)
 \begin{codebox}[C struct]
 \begin{minted}[linenos,fontsize=\scriptsize]{c}
 typedef struct {
+
     double x;
     double y;
 } point2d_t;
-
 
 point2d_t p = {3.14, 2.71};
 p.y = 1.61626E-35; // Planck length in m
@@ -347,18 +349,19 @@ p.y = 1.61626E-35
 	\item Represents \enquote{raw data} in memory
 	\item Essentially a \mintinline{c}{void*} \Thus accepted by any C-function taking a pointer argument
 	\end{itemize}
-\item Constructing a \inPy{bytes} object from a \inPy{str}ing:
+\item Constructing a \inPy{bytes} object: three out of many options
 	\begin{itemize}
-	\item \inPy{string.encode(encoding="ascii")} (or \texttt{encoding="utf-8"} or whatever encoding you use)
+	\item \inPy{bytesObject = string.encode(encoding="ascii")} \\
+	(or \texttt{encoding="utf-8"} or whatever encoding you use)
 	\item \inPy{bytesObject = b"some text"}
 	\item \inPy{bytesObject = bytes([68, 69, 65, 68])}
 	\end{itemize}
 	\item Recover via \inPy{string = bytesObject.decode(encoding="ascii"})
 \end{itemize}
 %
-\begin{hintbox}[Encodings]
+\begin{hintbox}[Encodings ...]
 \footnotesize
-... are the mapping \emph{bit pattern $\leftrightarrow$ character}. Multiple bytes can be used to represent a single character, and the details could fill an entire lecture, if you're interested.
+... are the mapping \emph{bit pattern $\leftrightarrow$ character}. Multiple bytes can be used to represent a single character, and the details could fill an entire lecture. Tell me if you're interested.
 \end{hintbox}
 %
 \end{frame}
@@ -378,7 +381,7 @@ p.y = 1.61626E-35
 	\end{itemize}
 \item Or use library \texttt{struct}
 	\begin{itemize}
-	\item \inPy{struct.pacl(typecodes, member_1, member_2, ...)}
+	\item \inPy{struct.pack(typecodes, member_1, member_2, ...)}
 	\item \texttt{typecodes}: string with same characters as for array, \zB \inPy{"dI"} for \mintinline{c}{{double, unsigned int}}
 	\item See \url{https://docs.python.org/3/library/struct.html}
 	\end{itemize}
@@ -452,7 +455,7 @@ library.print_two(pack3.ctypes.data_as(type_point_ptr))     # no type check!
 \begin{itemize}
 \item C-String: usually means \emph{byte string}
 	\begin{itemize}
-	\item Array of \mintinline{c}{char} or array of \mintinline{c}{unsiged char}
+	\item Array of \mintinline{c}{char} or array of \mintinline{c}{unsigned char}
 	\item ASCII\footnote{... or ANSI/Windows-1252, CP 850, ... encodings are a mess}-only
 	\end{itemize}
 \item Also: wide characters or wide strings (\emph{wstrings})
@@ -535,6 +538,47 @@ The pointer \texttt{result} should be \texttt{free}'d somewhere!
 
 % =========================================================================== %
 
+\begin{frame}[fragile]{Global Variables}
+%
+\begin{itemize}
+\item C allows to export global variables across modules
+	\begin{itemize}
+	\item In header: \mintinline{c}{extern dataType variableName;}
+	\item In \emph{one} module: \mintinline{c}{dataType variableName = initValue;}
+	\end{itemize}
+\item These can be made available in Python, too
+	\begin{itemize}
+	\item Get corresponding \texttt{ctypes} class, \zB \texttt{ctypes.c\_double}
+	\item Use type class method \texttt{in\_dll(lib, nameString)}
+	\end{itemize}
+\end{itemize}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.2cm]
+\begin{codebox}[Exported Variables in C]
+\begin{minted}[linenos,fontsize=\scriptsize]{c}
+extern const unsigned int leet;
+const unsigned int leet = 1337
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Exported Variables in Python]
+\begin{minted}[linenos,fontsize=\scriptsize]{python3}
+import ctypes
+
+lib = ctypes.CDLL("library.so")
+leet = ctypes.c_uint.in_dll(lib, "leet")
+print(leet)  # c_uint(1337)
+\end{minted}
+\end{codebox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}{Module Loader}
 %
 \begin{itemize}
@@ -567,12 +611,10 @@ _objects_to_export = [
     ...
 ]
 
-def _generate_typed_call(func, parameter_types):
-    def wrapper(*args):
-        typed_args = (parameter_type(arg) for arg, parameter_type 
-                      in zip(args, parameter_types))
-        return func(*typed_args)
-    return wrapper
+_variables_to_export = [
+    # variable name as string, data types
+    ("pi", ctypes.c_double)
+]
 \end{minted}
 \end{codebox}
 %
@@ -584,17 +626,297 @@ def _generate_typed_call(func, parameter_types):
 %
 \begin{codebox}[... Continued]
 \begin{minted}[linenos, firstnumber=last, fontsize=\scriptsize]{python3}
+def _generate_typed_call(func, parameter_types):
+    def wrapper(*args):
+        typed_args = (parameter_type(arg) for arg, parameter_type 
+                      in zip(args, parameter_types))
+        return func(*typed_args)
+    return wrapper
+    
 for funcname, parameter_types, return_type in _objects_to_export:
     func = _lib[funcname]
     func.restype = return_type
     globals()[funcname] = func
+
+for variable, datatype in _variables_to_export:
+    globals()[variable] = datatype.in_dll(_lib, variable)
 \end{minted}
 \end{codebox}
 %
 \begin{warnbox}[No IDE-Support]
-The shown compactly lists all function data in a list. However, translation into code symbols is done dynamically/at runtime, so your IDE will have no idea that \texttt{importname.func\_void\_empty} even exists or what it returns. Consider a fully manual approach, or an automated module loader builder (see later).
+\footnotesize
+The shown compactly lists all function data in a list. However, translation into code symbols is done dynamically/at runtime, so your IDE will have no idea that \texttt{importname.func\_void\_empty} even exists or what it returns.
 \end{warnbox}
 %
 \end{frame}
 
+% =========================================================================== %
+
+\begin{frame}{Automatization with the \emph{C Foreign Function Interface} (CFFI)}
+%
+\begin{itemize}
+\item External Package to automatically create an \inPy{import}able wrapper
+\item Specify a C header to parse
+\item Generates a \texttt{.so}/\texttt{.dll} that is directly compatible with Python's \inPy{import}
+	\begin{itemize}
+	\item Wrapper for the C \texttt{.so}/\texttt{.dll}
+	\item Built in marshalling for all functions
+	\item Includes \mintinline{c}{extern} symbols
+	\item No IDE support, either
+	\end{itemize}
+\item Workflow
+	\begin{itemize}
+	\item Compile and link the original C shared library
+	\item Write a build script for CFFI in Python
+	\item \inPy{import wrapperForYourLib}
+	\end{itemize}
+\item Third party tool
+	\begin{itemize}
+	\item Install via \texttt{pip3 install cffi} (Linux, MacOS)
+	\item ... or via \texttt{pip install cffi} (Windows)
+	\item ... or however your package manager works
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Build Script]
+\begin{minted}[linenos,fontsize=\scriptsize]{python3}
+import cffi
+import pathlib
+
+ffi = cffi.FFI()
+
+lib_source_dir = pathlib.Path("../lib").absolute()
+header_filename = lib_source_dir / "bindingExamples.h"
+
+with open(header_filename) as h_file:
+    ffi.cdef(h_file.read())
+
+ffi.set_source(  # see next slide for the meaning of these arguments
+    "bindingExamples",
+    f'#include "{lib_source_dir}/bindingExamples.h"',
+    libraries=[lib_source_dir / "bindingExamples"],
+    library_dirs=[lib_source_dir.as_posix()],    # as_posix converts to a normal string
+    extra_link_args=[f"-Wl,-rpath,{lib_source_dir}"],
+)
+
+ffi.compile()
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\texttt{ffi.set\_source} -- Meaning of Parameters}
+%
+\begin{itemize}
+\item Parameter 1: Wrapper name
+	\begin{itemize}
+	\item CFFI creates a \texttt{.c}, a \texttt{.o} and a \texttt{.cpython-310-x86\_64-linux-gnu.so} with this name
+	\item Source code, object code and \inPy{import}able wrapper
+	\end{itemize}
+\item Parameter 2: Code inserted into wrapper code
+	\begin{itemize}
+	\item Usually: \mintinline{c}{#include "original_C_header.h"}
+	\item If C- and Python Code not in same directory: use absolute paths
+	\end{itemize}
+\item Parameter 3: \inPy{list} of libraries the wrapper references
+	\begin{itemize}
+	\item Usually: your C lib, maybe other C libs (m, blas, ...)
+	\item Corresponds to \texttt{-l} parameter of gcc
+	\end{itemize}
+\item Parameter 4: \inPy{list} of directories where libs are expected
+	\begin{itemize}
+	\item Corresponds to \texttt{-L} parameter of gcc
+	\end{itemize}
+\item Parameter 5: Path to wrapped library
+	\begin{itemize}
+	\item Usually same as in parameter 4
+	\item Must be the same if you use absolute paths ...
+	\item ... unless you move the lib between build and deploy phase
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Using a CFFI Wraper]
+\begin{minted}[linenos,fontsize=\scriptsize]{python3}
+import bindingExamples   # this was parameter 1 in the build script
+
+bindingExamples.lib.some_function()
+print(bindingExamples.lib.some_constant)
+
+print("bindingExamples contains these objects:")
+for name in dir(bindingExamples.lib):
+    print(name)
+
+print("original signature of one function:")
+print(bindingExamples.lib.func_void_charPtr.__doc__)
+# prints:
+#   'void func_void_charPtr(char *);
+#
+#   CFFI C function from bindingExamples.lib'
+\end{minted}
+\end{codebox}
+%
+\begin{warnbox}[No IDE Support]
+\footnotesize
+While it is possible to find the lib contents at runtime, IDEs are usually not aware of the module content (or even the module itself). A dummy .py wrapper can help.
+\end{warnbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Noteworthy Mentions}
+%
+\begin{itemize}
+\item PyBind11
+	\begin{itemize}
+	\item Same core idea as CFFI, but for C++11 and newer
+	\item Interface code in C++, not in Python
+	\item See \url{https://pybind11.readthedocs.io/en/stable/basics.html}
+	\end{itemize}
+\item Cython
+	\begin{itemize}
+	\item Compiles wrapper code (own Python-like language) into a module like CFFI
+	\item Works for C and C++
+	\item Can also cross-compile Python-Code into C-Code (nontrivial operation)
+	\item See \url{https://cython.org/}
+	\end{itemize}
+\item And a dozen other tools
+	\begin{itemize}
+	\item See \url{https://realpython.com/python-bindings-overview/}\footnote{%
+		I'm usually pretty fond of that page, but this article alone lacks in detail. It is a good starting place to discover the tools that suit you best.
+	}
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Why C++ is different\footnote{and also most other languages}}
+%
+\begin{itemize}
+\item C++ supports namespaces, templates and function overloading
+	\begin{itemize}
+	\item Essentially: multiple functions with same name
+	\item Name mangling: generate internal names that incorporate \enquote{missing} information
+	\end{itemize}
+\item How to deal with this
+	\begin{itemize}
+	\item Either: find out the mangled function names
+		\begin{itemize}
+		\item Linux: Command line tool \texttt{nm}
+		\item Windows: Third Party Tools like DLL Export Viewer (\url{http://www.nirsoft.net/utils/dll_export_viewer.html})
+		\end{itemize}
+	\item Or: Deactivate name mangling by placing function in an \mintinline{c++}{extern "C"} environment
+		\begin{itemize}
+		\item This forces C rules on your code, \ie no function overloading ...
+		\item ... but makes the binding logic on Python side easier
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[C++ Library]
+\begin{minted}[linenos,fontsize=\scriptsize]{c++}
+#include <iostream>
+
+#define WHO_AM_I() std::cout << __PRETTY_FUNCTION__ << std::endl
+
+                void func()                       {WHO_AM_I();}
+                void func([[maybe_unused]] int x) {WHO_AM_I();}
+namespace Foo { void func()                       {WHO_AM_I();} }
+extern "C"    { void func_unmangled()             {WHO_AM_I();} }
+\end{minted}
+\end{codebox}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.2cm]
+\begin{codebox}[C++ Main Module]
+\begin{minted}[linenos,fontsize=\scriptsize]{c++}
+#include "lib.hpp"
+
+int main() {
+    func();
+    func(0);
+    Foo::func();
+    func_unmangled();
+}
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Output]
+\begin{minted}[fontsize=\scriptsize]{text}
+void Foo::func()
+void func()
+void func(int)
+void func_unmangled()
+\end{minted}
+\end{cmdbox}
+\end{tcbraster} 
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{cmdbox}[Output nm libCpp.so]
+\begin{minted}[fontsize=\scriptsize]{text}
+0000000000004040 b completed.0
+                 U __cxa_atexit@GLIBC_2.2.5
+                 w __cxa_finalize@GLIBC_2.2.5
+00000000000010c0 t deregister_tm_clones
+...
+0000000000001222 T func_unmangled
+...
+00000000000011e5 T _Z4funci
+00000000000011af T _Z4funcv
+0000000000001179 T _ZN3Foo4funcEv
+...
+0000000000004041 b _ZStL8__ioinit
+                 U _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@GLIBCXX_3.4
+\end{minted}
+\end{cmdbox}
+%
+\begin{hintbox}[Results May Vary]
+\footnotesize
+The implementation details of name mangling are not specified in the C++ standard. This means, depending on which compiler you use (g++, clang, Intel C Compiler, MSVC, ...), you'll get very different names.
+\end{hintbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Welcome in the Era of You Poking Around in Computer Guts}
+%
+\begin{center}
+	\includegraphics[width=.8\linewidth]{./gfx/11-xkcd-linux}
+
+	\emph{This really is a true story, and she doesn't know I put it in my comic because her wifi hasn't worked for weeks.}
+
+	Source: \url{https://xkcd.com/456/}
+\end{center}
+%
+\end{frame}
 % =========================================================================== %
