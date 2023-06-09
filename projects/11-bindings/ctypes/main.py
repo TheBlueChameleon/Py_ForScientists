@@ -43,6 +43,10 @@ def main():
     print(bindingExamples.func_charPtr_empty().decode(encoding="ascii"))
     print(bindingExamples.func_charPtr_empty())
 
+    print()
+
+    print("Py from C:", bindingExamples.pi)
+
 
 if __name__ == '__main__':
     main()
