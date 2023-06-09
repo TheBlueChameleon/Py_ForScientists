@@ -487,7 +487,7 @@ Time elapsed: 1.0793380737304688 seconds
 
 \begin{center}
 \Thus Time consuming but uncritical part runs in parallel,\\
-	problematic part forced to run sequential.
+	problematic part forced to run sequentially.
 \end{center}
 %
 \end{frame}
@@ -691,7 +691,7 @@ if __name__ == '__main__':
 \item Two-way communication between \emph{exactly two} processes
 \item \texttt{mp.Pipe()} returns a \inPy{tuple} of two \texttt{mp.Connection} objects
 \item Pass one \texttt{mp.Connection} to each of two processes meant to communicate
-\item {mp.Connection} 
+\item \texttt{mp.Connection} 
 	\begin{itemize}
 	\item Method \texttt{send(value)} -- push \texttt{value} through the \texttt{Pipe} to the other \texttt{Process}.\\
 		Can be \emph{any data type} (that can be pickle'd)
