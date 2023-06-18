@@ -892,7 +892,7 @@ if __name__ == "__main__":
     numbers = list(range(2, 200))
     
     pool = mp.Pool(4)
-    prime_indicator = mp.map(is_prime, numbers)
+    prime_indicator = pool.map(is_prime, numbers)
     pool.close()
     pool.join()
     

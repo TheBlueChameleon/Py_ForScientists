@@ -567,8 +567,8 @@ ys = f(xs, amplitude_true, frequency_true)
 
 window = slice(0, 20, 1)
 
-popt_naive, pcov_naive = scipy.optimize.curve_fit(f, xs, ys)
-popt_hint, pcov_hint = scipy.optimize.curve_fit(f, xs, ys, p0=(5, 20))
+popt_naive , pcov_naive  = scipy.optimize.curve_fit(f, xs, ys)
+popt_hint  , pcov_hint   = scipy.optimize.curve_fit(f, xs, ys, p0=(5, 20))
 popt_window, pcov_window = scipy.optimize.curve_fit(f, xs[window], ys[window])
 
 # printing table with standard deviations
