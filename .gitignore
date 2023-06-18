@@ -5,6 +5,8 @@
 
 **/a.out
 **/*.so
+**/*.o
+sharedLibraryTest
 
 
 Concept.pdf
