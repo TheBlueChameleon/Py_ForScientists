@@ -1,0 +1,20 @@
+@startuml
+class object
+class Base
+class A
+class B
+class C
+class D
+class D
+
+Base -up-> object
+A -up-> Base
+B -up-> Base
+
+D -up-> B
+C -up-> A
+
+E -up-> C
+E -up-> D
+
+@enduml
