@@ -6,7 +6,7 @@
 
 % =========================================================================== %\\
 
-\begin{frame}{Christmas Settings}
+\begin{frame}{Dependency}
 %
 \begin{columns}[T]
 \column{.5\linewidth}
@@ -60,7 +60,7 @@
 %
 \begin{itemize}
 \item Every-day language\footnote{for nerds like us}: to compile = to translate source code into executable machine language
-\item Uh, technically ...
+\item \href{https://knowyourmeme.com/memes/ackchyually-actually-guy}{Uh, actually} ...
 	\begin{itemize}
 	\item Compiling: translating a high-level language into a low-level language
 	\item Assembling: creating \emph{object code} (essentially machine language fragments) from low-level language code
@@ -203,7 +203,7 @@
 \end{itemize}
 %
 \begin{hintbox}[See This Link for a Deep Dive]
-
+\footnotesize
 \url{https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html}
 \end{hintbox}
 %
@@ -524,7 +524,7 @@ result_string = result_bytes.decode(
 )
 
 print(result_string)     # FOO BAR
-func(text)               # F
+print(func(text))        # F
 \end{minted}
 \end{codebox}
 \end{tcbraster}
@@ -636,7 +636,7 @@ def _generate_typed_call(func, parameter_types):
 for funcname, parameter_types, return_type in _objects_to_export:
     func = _lib[funcname]
     func.restype = return_type
-    globals()[funcname] = func
+    globals()[funcname] = _generate_typed_call(func, parameter_types)
 
 for variable, datatype in _variables_to_export:
     globals()[variable] = datatype.in_dll(_lib, variable)

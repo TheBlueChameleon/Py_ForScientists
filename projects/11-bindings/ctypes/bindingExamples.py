@@ -36,6 +36,7 @@ for funcname, parameter_types, return_type in _functions_to_export:
     func = _lib[funcname]
     func.restype = return_type
     globals()[funcname] = func
+    globals()[funcname + "_"] = _generate_typed_call(func, parameter_types)
 
 for variable, datatype in _variables_to_export:
     globals()[variable] = datatype.in_dll(_lib, variable)

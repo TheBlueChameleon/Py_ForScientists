@@ -141,8 +141,8 @@ def fit_2D(data):
 
 
 def main():
-    show_1d_minimal()
-    show_1d_fail()
+    # show_1d_minimal()
+    # show_1d_fail()
 
     data = prepare_data_2d(show_plot=True)
     fit_2D(data)
