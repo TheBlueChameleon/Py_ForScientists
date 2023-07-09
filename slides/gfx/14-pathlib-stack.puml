@@ -1,0 +1,90 @@
+@startuml
+skinparam ArrowHeadColor none
+skinparam LineColor none
+
+partition Pathlib Library #FFCCCC {
+    :Path]
+    split
+        :PurePath]
+    split again
+        :Concrete Path]
+    end split
+}
+
+partition Older Python Libraries #FFEEDD {
+    split
+        :os]
+    split again
+        :posixpath]
+    split again
+        :ntpath]
+    split again
+        :fnmatch]
+    split again
+        :re]
+    split again
+        :functools]
+    split again
+        :io]
+    split again
+        :sys]
+    end split
+}
+
+partition Python Runtime  #FFFFDD {
+    split
+        :""open(filename, mode)""]
+    split again
+        :Dynamic Loading of Libraries]
+    end split
+}
+
+partition OS stack  #CCFFDD {
+    split
+        partition File System APIs #AAFFAA {
+            partition High Level APIs #AAFFAA {
+                split
+                    :""FILE* fopen(char* filename, char* mode)""]
+                split again
+                    :""size_t fwrite(void* buffer, size_t size, size_t count, FILE* stream)""]
+                end split
+            }
+
+            partition Mid Level APIs #AAFFAA {
+                split
+                    :""char* resolveRelativePath(char* path)""]
+                split again
+                    :""Inode* getInode(char* path)""]
+                end split
+            }
+
+            partition Low Level APIs #AAFFAA {
+                split
+                    :""ErrorCode createInode(Inode** createdInode)""]
+                split again
+                    :"" addClusterToInode(Inode* inode, size_t clusterId)""]
+                end split
+            }
+        }
+    split again
+        partition Various Runtime Libraries #AAFFAA {
+            split
+                :fnctl.h]
+            split again
+                :regex.h]
+            split again
+                :...]
+            end split
+        }
+    end split
+}
+
+partition Hardware Driver #CCDDFF {
+    split
+        :""ErrorCode write(size_t sectorId, size_t blockId, size_t N, void* bytes)""
+        (Instead of assembly commands that send specific numbers to processor ports)]
+    split again
+        :""ErrorCode read(size_t sectorId, size_t blockId, size_t N, void* bytes)""]
+    end split
+}
+@enduml
