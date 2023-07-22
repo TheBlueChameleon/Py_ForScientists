@@ -1,0 +1,51 @@
+@startuml;
+
+hide members
+
+class EnemyFactory {}
+
+together {
+    class TrollBuilder {}
+    class GhoulBuilder {}
+    class WarriorBuilder {}
+}
+
+EnemyFactory .down.> TrollBuilder   : instantiates
+EnemyFactory .down.> GhoulBuilder   : " instantiates"
+EnemyFactory .down.> WarriorBuilder : instantiates
+
+abstract class Enemy
+'together {
+    class Troll   {}
+    class Ghoul   {}
+    class Warrior {}
+'}
+
+Troll   -up-> Enemy
+Ghoul   -up-> Enemy
+Warrior -up-> Enemy
+
+class EnemyCoordinator {}
+
+Troll   o.down. EnemyCoordinator
+Ghoul   o.down. EnemyCoordinator
+Warrior o.down. EnemyCoordinator
+
+TrollBuilder   ..> Troll   : " builds"
+GhoulBuilder   ..> Ghoul   : " builds"
+WarriorBuilder ..> Warrior : " builds"
+
+abstract class Weapon {}
+class Sword
+class Club
+
+Bow   -down-> Weapon
+Sword -down-> Weapon
+Club  -down-> Weapon
+
+
+Troll             *-- Club
+Warrior    "\n          0..1" *-- Sword
+Warrior "   0..1" *-- Bow
+
+@enduml;

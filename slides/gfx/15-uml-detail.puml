@@ -1,0 +1,24 @@
+@startuml;
+
+abstract class Enemy {
+    A thing that wants to kill you and that you want to kill.
+    ==
+    .. public members ..
+    + {abstract} string DISPLAYTEXT
+    .. private members ..
+    - Weapon weapon
+    - int health
+    - Condition condition
+    - EnemyCoordinator EnemyCoordinator
+    - Move plannedMove
+    --
+    .. public methods ..
+    + {static} void planNextMove(MovePlanInput movePlanInput)
+    + {abstract} void attack(Unit target)
+    .. protected methods ..
+    # MovePlanInput compilePlanningInput()
+    .. private methods ..
+    - void drawAnimation()
+}
+
+@enduml;

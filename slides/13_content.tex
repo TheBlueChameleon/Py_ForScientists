@@ -79,20 +79,20 @@
 %
 \begin{codebox}[Approximate C equivalent of a Python object]
 \begin{minted}[fontsize=\footnotesize, linenos]{c}
-struct_objectInstance {
+typedef struct _objectInstance {
     // used for garbage collection
-    struct objectInstance* _gc_next;    
-    struct objectInstance* _gc_prev;
+    struct _objectInstance* _gc_next;    
+    struct _objectInstance* _gc_prev;
     
     // "Python infrastructure"
-    size_t                 refCount;
-    struct objectInstance* type;
+    size_t                  refCount;
+    struct _objectInstance* type;
     
     // contains actual attributes
-    struct objectInstance* __dict__;
+    struct _objectInstance* __dict__;
     // used by weakref module
-    struct objectInstance* __weakref__;
-};
+    struct _objectInstance* __weakref__;
+} objectInstance;
 \end{minted}
 \end{codebox}
 %
