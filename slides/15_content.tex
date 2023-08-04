@@ -52,6 +52,7 @@ Source: \url{https://xkcd.com/156/}
 
 \begin{frame}[fragile]{Docstrings -- \inPy{__doc__}}
 %
+\vspace{-3pt}
 \begin{itemize}
 \item All functions, classes and packages have an attribute \inPy{__doc__}
 \item Contain's online help-text for any object
@@ -72,6 +73,7 @@ Source: \url{https://xkcd.com/156/}
 	\end{itemize}
 \end{itemize}
 %
+\vspace{-6pt}
 \begin{hintbox}[REPL]
 \footnotesize
 $^{*)}$ REPL means \emph{Read-Eval-Print-Loop}, \ie a programming interface where typed lines are executed (evaluated) immediately, like the Python console.
@@ -83,6 +85,7 @@ $^{*)}$ REPL means \emph{Read-Eval-Print-Loop}, \ie a programming interface wher
 
 \begin{frame}[fragile]
 %
+\vspace{-3pt}
 \begin{codebox}[Example: Function DocString]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 def print_head(text, width = 80) :
@@ -114,6 +117,7 @@ help(print_head)
 
 \begin{frame}[fragile]
 %
+\vspace{-3pt}
 \begin{codebox}[Example: Limitations of automated assignment]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 def foo():
@@ -239,6 +243,7 @@ help(TextTools)
 	\item Help on inherited methods shown with the derived class
 	\end{itemize}
 \end{itemize}
+\pause
 %
 \column{.3\linewidth}
 \begin{itemize}
@@ -249,6 +254,7 @@ help(TextTools)
 	\end{itemize}
 \end{itemize}
 \includegraphics[width=\linewidth]{./gfx/15-helptext-mouseover}
+\pause
 %
 \column{.3\linewidth}
 \begin{itemize}
@@ -306,11 +312,13 @@ def numpy_isqrt(number):
 	\item Introduced by \texttt{/**} (normal comments begin with \texttt{/*} in Java)
 	\item Elements like \texttt{@param} (names a parameter and what it does)
 	\end{itemize}
+	\pause
 \item Doxygen
 	\begin{itemize}
 	\item Reads structure and comments of code in various languages
 	\item Parses these special commands to generate professional-looking help files
 	\item HTML and PDF
+	\item Doxygen for Python: uses DocStrings
 	\item See \url{https://www.doxygen.nl/}
 	\end{itemize}
 \end{itemize}
@@ -328,8 +336,10 @@ def numpy_isqrt(number):
 \column{.4\linewidth}
 \begin{itemize}
 \item Picture: from a (now dead) old project of mine
+	\pause
 \item Documentation all across code under devellopment adds a lot of noise and hinders progress
 \item Good documentation is obviously good, but too much binds your ressources
+	\pause
 \item Tastes differ
 	\begin{itemize}
 	\item Current team: only in \emph{public interface}
@@ -362,6 +372,7 @@ Source: \url{https://xkcd.com/1537/}
 
 \begin{frame}{Annotations aka Type Hints}
 %
+\vspace{-3pt}
 \begin{itemize}
 \item Python is \emph{duck typed}
 	\begin{itemize}
@@ -381,6 +392,7 @@ Source: \url{https://xkcd.com/1537/}
 \item Type hints: way to tell Python how a function is \emph{intended} to be used
 \end{itemize}
 %
+\vspace{-6pt}
 \begin{hintbox}[Namesake: \emph{Duck Typed Languages} and \emph{Duck Test}]
 \footnotesize
 \emph{{\color{gray}I can't prove you are a Communist.} But when I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks—I'm certainly going to assume that he is a duck.}
@@ -422,6 +434,7 @@ Emil Mazey, 1946
 		\item E.\;g.: Either a \inPy{float} or an \inPy{int}: \inPy{typing.Union[float, int]}
 		\end{itemize}
 	\end{itemize}
+	\pause
 \item What They Do
 	\begin{itemize}
 	\item Nothing$^{*)}$
@@ -434,6 +447,7 @@ Emil Mazey, 1946
 
 \begin{frame}[fragile]{$^{*)}$ What They \emph{Actually} Do}
 %
+\vspace{-3pt}
 Type hints are ignored at runtime, but ...
 \begin{itemize}
 \item They do end up in another special attribute \inPy{__annotations__}
@@ -447,6 +461,7 @@ Type hints are ignored at runtime, but ...
 	\end{itemize}
 \end{itemize}
 %
+\vspace{-3pt}
 \begin{hintbox}[Namesake: \emph{Linter}]
 \footnotesize
 Stephen C. Johnson, a computer scientist at Bell Labs, came up with the termin 1978 while working on the C programming language. The term \enquote{lint} was derived from lint, the name for the tiny bits of fiber and fluff shed by clothing, as the tool should act like the lint trap in a clothes dryer, detecting small errors to great effect.
@@ -488,6 +503,7 @@ print(vector_length.__annotations__)
 
 \begin{frame}[fragile]
 %
+\vspace{-6pt}
 \begin{codebox}[Example: Annotated Code (Continued)]
 \begin{minted}[fontsize=\scriptsize, linenos, firstnumber=last]{python3}
 foo = [1, 2, 3]
@@ -500,6 +516,7 @@ print(vector_length(return_untyped_data()))
 \end{minted}
 \end{codebox}
 %
+\vspace{-6pt}
 \begin{cmdbox}[Output: Annotated Code]
 \begin{minted}[fontsize=\scriptsize]{text}
 {'v': typing.Collection[typing.Union[int, float, complex]], 
@@ -520,6 +537,7 @@ Traceback (most recent call last):
 
 \begin{frame}[fragile]{How \texttt{mypy} Would Have Warned You}
 %
+\vspace{-9pt}
 \begin{cmdbox}[Install mypy]
 \begin{minted}[fontsize=\scriptsize]{text}
 $ python3 -m pip install mypy
@@ -527,9 +545,17 @@ $ python3 -m pip install mypy
 %$
 \end{cmdbox}
 %
-\begin{cmdbox}[Output: Annotated Code]
+\vspace{-9pt}
+\begin{cmdbox}[Invoking mypy]
 \begin{minted}[fontsize=\scriptsize]{text}
 $ mypy --strict TypeHints.py 
+\end{minted}
+%$
+\end{cmdbox}
+%
+\vspace{-9pt}
+\begin{cmdbox}[Output: Annotated Code]
+\begin{minted}[fontsize=\scriptsize]{text}
 TypeHints.py:16: error: Function is missing a return type annotation  [no-untyped-def]
 TypeHints.py:24: error: Argument 1 to "vector_length" has incompatible type "List[str]"; 
     expected "Collection[Union[int, float, complex]]"  [arg-type]
@@ -537,7 +563,6 @@ TypeHints.py:26: error: Call to untyped function "return_untyped_data" in typed 
     [no-untyped-call]
 Found 3 errors in 1 file (checked 1 source file)
 \end{minted}
-%$
 \end{cmdbox}
 %
 \end{frame}
@@ -604,7 +629,9 @@ See lecture 2 for details.
 	\item \inPy{foo.__name__} will give \texttt{foo}, but \inPy{decorator(foo).__name__} will give \texttt{wrapper}
 	\item Likewise: \inPy{__qualname__}, \inPy{__module__}, \inPy{__annotations__} and \inPy{__doc__}
 	\end{itemize}
+	\pause
 \item Solution (manually): copy special attributes from decorated function onto wrapper
+	\pause
 \item Solution (simpler): Use \texttt{functools.wraps} decorator on wrapper
 %
 \begin{codebox}[Scheme: Special Attribute Preserving Decorator]
@@ -649,15 +676,18 @@ Source: \url{https://xkcd.com/1188/}
 	\item A \emph{base class} serves as a template for one or several derived classes.
 	\item Its attributes and methods are copied onto the child class(es), unless overridden
 	\end{itemize}
+	\pause
 \item Abstract base classes
 	\begin{itemize}
 	\item \enquote{Promise} methods to be present, but don't provide any implementation
-	\item Only child classes that implement all abstract methods can be instantiated
+	\item Only child classes that implement \emph{all} abstract methods can be instantiated
+	\item Child classes that only implement \emph{some} abstract methods are abstract classes, too
 	\item[\Thus] Safety mechanism: you cannot forget important features
 	\end{itemize}
+	\pause
 \item Example: abstract class Collection
 	\begin{itemize}
-	\item Abstract method: \texttt{forEach(action: lambda element -> None)}
+	\item Abstract method: \inPy{forEach(action: lambda element -> None)}
 	\item Child classes \texttt{list} and \texttt{sortedset}
 	\item \texttt{list}: iterates over indices
 	\item \texttt{sortedset}: traverse tree structure
@@ -697,14 +727,17 @@ See lecture 13 for details.
 %
 \begin{itemize}
 \item Not a part of the core language features
+	\pause
 \item Same behaviour made available via \emph{metaclasses}
+	\pause
 \item No need to implement yourself
 	\begin{itemize}
 	\item \inPy{from abc import ABC, abstractmethod, ABCMeta}
 	\item Make your class derived from \texttt{ABC} to use this language extension: \inPy{class Foo (ABC): ...}
-	\item If for some reason, inheritence is not an option, you can also directyl use the Metaclass: \inPy{class Foo (metaclass=ABCMeta): ...}
+	\item If for some reason, inheritence is not an option, you can also directly use the Metaclass: \inPy{class Foo (metaclass=ABCMeta): ...}
 	\item Use the decorator \emph{@abstractmethod} to mark any method that must be overridden
 	\end{itemize}
+	\pause
 \item Abstract Method body
 	\begin{itemize}
 	\item Usually empty (just use \inPy{pass})
@@ -719,6 +752,7 @@ See lecture 13 for details.
 
 \begin{frame}[fragile]
 %
+\vspace{-3pt}
 \begin{codebox}[Instantiating ABCs]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 from abc import ABC, abstractmethod
@@ -748,95 +782,6 @@ b.foo()           ## shows "foo-ing around" and "I'm in a Bar."
 
 % =========================================================================== %
 
-\begin{frame}[fragile]{Tangent: Pseudo-Private Members and Name Mangling}
-%
-\begin{itemize}
-\item Private Members:
-	\begin{itemize}
-	\item Concept of many OO languages: access only from within class methods
-	\item Prevents inconsistent state by limiting the ways mutation can happen (\thus only via methods guaranteed to generate a valid state)
-	\item Help with inheritance: derived class can't see private members, hence may define members of the same name
-	\end{itemize}
-\item Python: no such concept
-	\begin{itemize}
-	\item Convention: treat members beginning with a single underscore as private
-	\item Name mangling when beginning with a double underscore:
-		\begin{itemize}
-		\item \texttt{\_\_foo} automatically becomes \texttt{\_TheClass\_\_foo}
-		\item Avoids (most) name clashes
-		\item You can still \texttt{instance.\_TheClass\_\_foo}
-		\end{itemize}
-	\end{itemize}
-\end{itemize}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]
-%
-\begin{codebox}[Name Mangling]
-\begin{minted}[linenos, fontsize=\scriptsize]{python3}
-class Foo:
-    def __private(self):
-        pass
-
-print(dir(Foo))
-print('_Foo__private' in dir(Foo))
-\end{minted}
-\end{codebox}
-%
-\begin{cmdbox}[Output]
-\begin{minted}[fontsize=\scriptsize]{text}
-['_Foo__private', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', 
- '__eq__', '__format__', '__ge__', '__getattribute__', '__getstate__', '__gt__', 
- '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', 
- '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', 
- '__sizeof__', '__str__', '__subclasshook__', '__weakref__']
-True
-\end{minted}
-\end{cmdbox}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]
-%
-\vspace*{-2pt}
-\begin{defbox}[Quote]
-\footnotesize
-\enquote{\emph{No, it means that in Python we are consenting adults, and either respect
-attributes with a leading underscore as private - or willfully chose to
-*not* do that because of good reasons.}}
-
-See \href{https://mail.python.org/pipermail/python-list/2009-November.txt}{\thus The Python Mailing List}
-\end{defbox}
-%
-\vspace*{-4pt}
-\begin{codebox}[Privacy vs Dynamicity]
-\begin{minted}[linenos, fontsize=\scriptsize]{python3}
-class Foo:
-    def __init__(self):
-        self.member = None
-
-def method(obj, recurse=False):
-    obj.member = "something"
-    if recurse: method(self, False)
-
-foo = Foo()
-
-Foo.method = method
-
-foo.method()
-method(foo)
-\end{minted}
-\end{codebox}
-%
-\end{frame}
-
-% =========================================================================== %
-
 \begin{frame}{Why would I want that?}
 %
 \begin{itemize}
@@ -845,6 +790,7 @@ method(foo)
 	\item Better fail to create instance than to only detect crash when trying out a specific feature that you might forget to test
 	\item Works well together with Type Hints/Linters
 	\end{itemize}
+	\pause
 \item Separate Intent from Implementation
 	\begin{itemize}
 	\item Intent: operate on some \emph{collection of values} \Thus \inPy{class Collection(ABC)}
@@ -859,6 +805,7 @@ method(foo)
 		\item What is the fastest way of [achieving the goal the abstract method promises]?
 		\end{itemize}
 	\end{itemize}
+	\pause
 \item Good Place for Documentation
 	\begin{itemize}
 	\item ABCs rarely change \Thus longer texts here don't hurt much
