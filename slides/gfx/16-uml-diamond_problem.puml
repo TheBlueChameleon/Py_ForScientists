@@ -1,0 +1,21 @@
+@startuml;
+
+class Object {
+    boolean equals(other: Object)
+}
+
+class Rectangle {
+    boolean equals(other: Object)
+}
+Rectangle -up-> Object
+
+class Clickable {
+    boolean equals(other: Object)
+}
+Clickable -up-> Object
+
+class Button {}
+Button -up-> Rectangle
+Button -up-> Clickable
+
+@enduml;

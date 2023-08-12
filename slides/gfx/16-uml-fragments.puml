@@ -1,0 +1,64 @@
+@startuml;
+
+interface Scriptable {
+    + writeScript(std::ostream stream)
+}
+
+interface Persistable {
+    + setFilename(std::filesystem::path filename)
+}
+
+interface TerminalInfoProvider
+
+TerminalInfoProvider -up-> Scriptable
+TerminalInfoProvider -up-> Persistable
+
+package TerminalInfoProviders <<frame>> #BBEEFF {
+    together {
+        class PdfCairo
+        class PngCairo
+        class Jpeg
+    }
+
+    class PixelSizeFragment {
+        - std::pair<int> dimension
+        + void setDimension(int width, int height)
+    }
+    PixelSizeFragment -up-* Jpeg
+
+    class UnitsSizeFragment {
+        - std::pair<double> dimension
+        - LengthUnit unit
+        + void setDimension(double width, double height, LengthUnit unit)
+    }
+    UnitsSizeFragment -up-* PdfCairo
+
+    class HybridSizeFragment {
+        - std::variant<std::pair<int>, std::pair<std::pair<double>, LengthUnit>> dimension
+        + void setDimension(int width, int height)
+        + void setDimension(double width, double height, LengthUnit unit)
+    }
+    HybridSizeFragment -up-* PngCairo
+
+    class BackgroundColourFragment {
+        - std::string backgroundColor
+        + void setBackgroundColor(std::string color)
+    }
+    BackgroundColourFragment -up-* PdfCairo
+    BackgroundColourFragment -up-* PngCairo
+    BackgroundColourFragment -up-* Jpeg
+}
+
+TerminalInfoProvider --> PdfCairo
+TerminalInfoProvider --> PngCairo
+TerminalInfoProvider --> Jpeg
+
+interface ScriptFragment {
+    + writeScriptFragment(std::ostream stream)
+}
+
+ScriptFragment -up-> BackgroundColourFragment
+ScriptFragment -up-> PixelSizeFragment
+ScriptFragment -up-> UnitsSizeFragment
+ScriptFragment -up-> HybridSizeFragment
+@enduml;
