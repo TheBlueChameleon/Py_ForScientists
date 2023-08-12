@@ -11,7 +11,7 @@
 \begin{columns}
 \column{.5\linewidth}
 \begin{center}
-\includegraphics[width=.9\linewidth]{./gfx/08-xkcd-drinking-fountains}\\
+\includegraphics[width=.9\linewidth]{./gfx/03-xkcd-drinking-fountains}\\
 \end{center}
 %
 \column{.4\linewidth}
@@ -68,7 +68,7 @@ An iterator is any instance of a class that provides a \inPy{__next__} method wh
 \end{defbox}
 %
 \column{.3\linewidth}
-\includegraphics[width=\linewidth]{./gfx/08-geek}
+\includegraphics[width=\linewidth]{./gfx/03-geek}
 \emph{So, everything's clear, right?}
 
 \vspace{6pt}
@@ -127,13 +127,15 @@ Often, an iterator also has an \inPy{__iter__} method, \ie is an iterable itself
 
 \begin{frame}[fragile]
 %
+\vspace{-3pt}
 \begin{codebox}[The Code You Write]
 \begin{minted}[fontsize=\footnotesize]{python3}
 for element in iterable:
     ...
 \end{minted}
 \end{codebox}
-%
+
+\vspace{-9pt}
 \begin{codebox}[What Python Actually Does]
 \begin{minted}[fontsize=\footnotesize]{python3}
 iterator = iter(iterable)
@@ -145,7 +147,8 @@ while True:
         break
 \end{minted}
 \end{codebox}
-%
+
+\vspace{-9pt}
 \begin{hintbox}[Magic Methods]
 \footnotesize
 \inPy{iter(iterable)} calls \inPy{iterable.__iter__}.\\
@@ -182,6 +185,7 @@ while True:
 %
 \begin{columns}[T]
 \column{.6\linewidth}
+\vspace{-9pt}
 \begin{defbox}[Collatz Sequences]
 \small
 Let there be an arbitrary positive integer $c_0$. Then we can recursively define a sequence:
@@ -202,7 +206,7 @@ Introduced in 1937, it is one of the most famous \emph{unsolved} problems in mat
 \end{hintbox}
 %
 \column{.3\linewidth}
-\includegraphics[width=.9\linewidth]{./gfx/08-xkcd-collatz}
+\includegraphics[width=.9\linewidth]{./gfx/03-xkcd-collatz}
 
 \footnotesize
 \emph{The Strong Collatz Conjecture states that this holds for any set of obsessively-hand-applied rules."}\\
@@ -215,6 +219,7 @@ Introduced in 1937, it is one of the most famous \emph{unsolved} problems in mat
 
 \begin{frame}[fragile]
 %
+\vspace{-9pt}
 \begin{columns}[T]
 \column{.7\linewidth}
 \begin{codebox}[A Collatz Sequence Generator]
@@ -593,7 +598,7 @@ For \emph{simple} examples, it is often clearer readable to use the comprehensio
 \begin{frame}[fragile]
 %
 \begin{codebox}[Short Circuiting]
-\begin{minted}[fontsize=\footnotesize, linenos]{python3}
+\begin{minted}[fontsize=\scriptsize, linenos]{python3}
 import time
 
 def say_A: print("A"); return True

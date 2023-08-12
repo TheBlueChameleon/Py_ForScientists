@@ -40,7 +40,7 @@ Source: \url{https://xkcd.com/1695/}
 \item Some Design Patterns
 	\begin{itemize}
 	\item Fragments
-	\item Builder and Factory
+	\item Visitor
 	\end{itemize}
 \end{itemize}
 %
@@ -214,7 +214,7 @@ set term jpeg
 	\item Output file names of script and generated plot file, plot types, data sources, ...
 	\item[\Thus] Class \texttt{Report} \enquote{Container of class instances}
 	\item[\Thus] \texttt{Report} has attributes: \texttt{TerminalInfoProvider}, \texttt{std::vector<Sheet>} (analog to \inPy{list}), ...
-	\item[\Thus] \texttt{Sheet}, in term, is composed of several other classes
+	\item[\Thus] \texttt{Sheet} is composed of several other classes
 		\pause
 	\item[\Thus] Responsibility of \texttt{Report}: Provide Infrastructure for its constituent attributes.
 		\begin{itemize}
@@ -277,11 +277,11 @@ class Derived (Base1, Base2):
 
 class Aggregated:
     def __init__ (self):
-        self.fragments = [Base1(), Base2()]
+        self.fragments = {Base1: Base1(), Base2: Base2()}
 
     def method(self):
-        for fragment in self.fragments:
-            fragment.method()
+        self.fragments[Base1].method()
+        self.fragments[Base2].method()
 \end{minted}
 \end{codebox}
 %
@@ -304,46 +304,45 @@ For some more details, see lecture 13.
 
 % =========================================================================== %
 
-\begin{frame}{Tangent: Factory Pattern and Builder Pattern}
+\begin{frame}[fragile]{Tangent: Diamond Problem}
 %
+\begin{columns}
+\column{.35\linewidth}
+\includegraphics[width=\linewidth]{./gfx/16-uml-diamond_problem}
+%
+\column{.55\linewidth}
 \begin{itemize}
-\item Consider an adventure game, loosely speaking a Roguelike
-\item Go on quests, fight enemies, collect loot
-\item Procedurally generated
-	\pause
-\item Parent \inPy{class Enemy} with subclasses \texttt{Troll}, \texttt{Ghoul}, \texttt{Warrior}, ...
-\item Problem 1: Different settings call for different enemies
+\item Ambiguous Inheritance Situation
 	\begin{itemize}
-	\item Encounter trolls in mountains, ghouls in catacombs, warriors everywhere
-	\end{itemize}
-\item Problem 2: Complex setup for each enemy
-	\begin{itemize}
-	\item Give them weapons, set hit points, known spells, colour of underwear, ...
+	\item \texttt{Rectangle} and \texttt{Clickable} both override \texttt{equals}
+	\item \texttt{Button} does not
+	\item[\Thus] What should \texttt{Button.equals} do?
 	\end{itemize}
 	\pause
-\item Solution 1: Factory
+\item Python: Depends on order in inheritance
+\item C++: Requires explicit call path
+\item Java: Forbids multiple inheritance ...
 	\begin{itemize}
-	\item Class that takes some context values (\zB Landscape ID) and returns appropriate class instance (\zB random \texttt{Enemy} found in that region)
+	\item ... but allows multiple interfaces with default implementations
+	\item Explicit implementation (forwarding) on the lowest level (\texttt{Button}) necessary
 	\end{itemize}
-	\pause
-\item Solution 2: Builder
-	\begin{itemize}
-	\item Class that only calls the constructor (and maybe some setters) of the object to build
-	\end{itemize}
-	\pause
-\item Subtle difference
-\item For simple cases, you can unite the roles ... but this violates the SRP!
+\end{itemize}
+\end{columns}
+\pause
+%
+\vspace{3pt}
+\begin{itemize}
+\item[\Thus] Avoid diamond shapes in your class graphs -- should be trees
+\item[\Thus] Fragment/Aggregation pattern
 \end{itemize}
 %
 \end{frame}
 
 % =========================================================================== %
 
-\begin{frame}
+\begin{frame}{Project Structure Excerpt}
 %
-\begin{center}
-\includegraphics[width=.65\linewidth]{./gfx/15-uml-big}
-\end{center}
+\includegraphics[width=\linewidth]{./gfx/16-uml-fragments}
 %
 \end{frame}
 
@@ -585,7 +584,7 @@ Usually only such classes that are accepted as parameters to other methods of yo
 	\item \texttt{{\color{blue}s}plot 'numbers.dat' using 1:2:3 with lines}
 	\item[\Thus] Tempting to retrofit a parameter \texttt{is3D} that adds the \texttt{s} and allows an extra input column
 		\pause
-	\item ... but the same plot there may only be 2D \emph{or} 3D plots
+	\item ... but on the same plot there may only be 2D \emph{or} 3D plots
 	\item ... and the configuration of axes is different
 	\item ... and in other plot types, this gives much more variation
 	\end{itemize}
@@ -602,18 +601,43 @@ Usually only such classes that are accepted as parameters to other methods of yo
 
 % =========================================================================== %
 
-\begin{frame}{Conclusion}
+\begin{frame}
+%
+\begin{recapbox}[Iteratables and Iterators]
+An \emph{Iterable} is any structure you can \emph{iterate} over, \ie put it into a \inPy{for} statement (\inPy{for element in myIterable}). Examples include Python's \inPy{list}, \inPy{set}, \inPy{dict}, etc. User-defined structures can also be made into iterables.\\
+The defining characteristic of an iterable is that it has a \inPy{__iter__} method which returns an \emph{Iterator}.
+
+\vspace{3pt}
+An \emph{Iterable} is a book keeping device that stores which element is next in the iteration. This can be in the form of a simple index variable for a list, or a more complex aggregate of information, for example when iterating over a tree structure.\\
+The defining characteristic of an iterable is that it has a \inPy{__next__} method which returns the next element for the \inPy{for} loop.
+
+\vspace{3pt}
+For some more details, see lecture 3.
+\end{recapbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Visitor Pattern and Double Dispatch}
 %
 \begin{itemize}
-\item Proper encapsulation solves a lot of problems
-\item Liskov Substitution Principle, Interface Segregation and Dependency Injection also boil down to encapsulation / KISS
-\item Implementing this encapsulation takes some upfront effort ...
-\item ... but it's well worth it once projects grow beyond a certain complexity
-\pause
-\item The SOLID principles are particularly prevalent in the Java ecosphere,
+\item Given
 	\begin{itemize}
-	\item which is (partially) the reason why Java is said to be 99\% boiler plate code ...
-	\item ... but the language is still heavily used in professional context, probably exactly because of adapting these scalability principles
+	\item Hierarchical structure of objects and subobjects of different types
+	\item I.\;e. several \inPy{class}es with multiple instances each, related to each other
+	\item Well defined iterator over the structure
+	\item Example: file system: tree of files and directories
+	\end{itemize}
+\item Want
+	\begin{itemize}
+	\item One or more operations that touch each element exactly once
+	\item Examples: show indented list on screen; pack into .zip archive
+	\end{itemize}
+\item Problems
+	\begin{itemize}
+	\item Polymorphic structure -- elements require different treatment depending on their type
+	\item Original classes might be considered closed
 	\end{itemize}
 \end{itemize}
 %
@@ -621,10 +645,82 @@ Usually only such classes that are accepted as parameters to other methods of yo
 
 % =========================================================================== %
 
-\begin{frame}
+\begin{frame}{Solution Part 1: Visitor Pattern}
 %
-\begin{center}
-\includegraphics[width=.8\linewidth]{./gfx/16-saw-melodys-guide-to-programming-languages}
-\end{center}
+\begin{itemize}
+\item Put the operations into a Visitor class
+	\begin{itemize}
+	\item Visitor class has methods like \texttt{doFor<Type>(element)}
+	\item Often, for convenience: method \texttt{traverse(rootElement)}
+	\end{itemize}
+\item[\Thus] Functionality Extended without any changes to the original classes
+\item[\Thus] Repeatable (more features can be added in the same way)
+\item[\Thus] Single Responsibility Principle obeyed!
+\pause
+\end{itemize}
+
+\vspace{6pt}
+... but how should \texttt{traverse} choose, which \texttt{doFor} method should be called?
+\begin{itemize}
+\item Naive approach: type checking
+	\begin{itemize}
+	\item \inPy{if isinstance(element, SomeType): doForSomeType(element)}
+	\item Problem: Requires update of \texttt{traverse} method whenever new types are introduced
+	\item Problem: May lead to ambiguous situations when there are derived classes
+	\end{itemize}
+\end{itemize}
 %
 \end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Solution Part 2: Double Dispatch}
+%
+\begin{itemize}
+\item \emph{Dispatching}: send off to a destination or for a purpose.
+\item In context of the pattern:
+	\begin{itemize}
+	\item Visitor calls a function \texttt{accept(visitor)} of the target class (\thus first dispatch)
+	\item Method \texttt{accept} calls the proper \texttt{doFor<Type>} method of \texttt{visitor} (because the class obviously knows its own type)
+	\end{itemize}
+\pause
+\item Requires change to the original classes, but ...
+	\begin{itemize}
+	\item ... at least a trivial one
+	\item ... can still be attached to strictly closed classes by inheritance (\texttt{Type} \thus \texttt{VisitableType})
+	\end{itemize}
+\item Introduces some coupling between \texttt{Type} classes and their \texttt{Visitor}(s)
+	\begin{itemize}
+	\item Common name scheme for the \texttt{doFor<Type>} methods
+	\item Can be enforced with abstract interface of the Visitor (\texttt{ZipPacker} inherits from \texttt{FileVisitor} and \texttt{DirectoryVisitor})
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Some Remarks On When To Use All Of This}
+%
+\begin{itemize}
+\item We've seen that these principles force us to introduce a lot of extra classes
+\item This \emph{does} add boilerplate code and extra work
+\item Certainly not necessary in small, \enquote{disposable} single-purpose scripts
+	\begin{itemize}
+	\item 90\% of what I do in Python falls in this category ...
+	\item ... but that's a matter of personal taste
+	\end{itemize}
+\pause
+\item The more complex projects become, the more valuable these principles become
+	\begin{itemize}
+	\item Projects are always more complex than they seem at the start
+	\item Desire to expand on finished projects arises very often
+	\item Most of my failed projects can be attributed to raising complexity up to the point where I couldn't handle the interconnectedness any longer
+	\end{itemize}
+\pause
+\item[\Thus] If you aren't going to finish your code on the same day: follow the guidelines
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
