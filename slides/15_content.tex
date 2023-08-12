@@ -818,6 +818,30 @@ b.foo()           ## shows "foo-ing around" and "I'm in a Bar."
 
 % =========================================================================== %
 
+\begin{frame}{IDE Support}
+%
+\begin{columns}
+\column{.5\linewidth}
+\begin{itemize}
+\item Often: IDE Feature: Automatically implement abstract methods
+\item Overwrites them with \enquote{empty} methods (\thus \inPy{pass})
+\item Jetbrains IDE family (PyCharm, IntelliJ, CLion, ...)
+	\begin{itemize}
+	\item Place cursor over child class
+	\item Light Bulb appears
+	\item Click Light Bulb or press ALT + ENTER
+	\end{itemize}
+\item QtCreator (C++): Also ALT + ENTER
+\end{itemize}
+%
+\column{.5\linewidth}
+\includegraphics[width=\linewidth]{./gfx/15-IDE_ImplementAbstractMethods}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}{Tech Support Cheat Sheet
 }
 %
