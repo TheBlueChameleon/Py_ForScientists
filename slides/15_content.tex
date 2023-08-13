@@ -475,7 +475,7 @@ Stephen C. Johnson, a computer scientist at Bell Labs, came up with the termin 1
 %
 \begin{codebox}[Example: Annotated Code]
 \begin{minted}[fontsize=\scriptsize, linenos]{python3}
-import cmath
+import math
 import typing
 
 Number = typing.Union[int, float, complex]
@@ -484,11 +484,11 @@ Vector = typing.Collection[Number]
 def dot_product(a: Vector, b: Vector) -> Number:
     if len(a) != len(b):
         raise AttributeError("Vectors do not have same length!")
+    # NB: conjugate() is defined on ints and floats!
+    return sum(x * y.conjugate() for x, y, in zip(a, b))
 
-    return sum(x * y for x, y, in zip(a, b))
-
-def vector_length(v: Vector) -> Number:
-    return cmath.sqrt(dot_product(v, v))
+def vector_length(v: Vector) -> float:
+    return math.sqrt(dot_product(v, v))
 
 def return_untyped_data():
     return ['1', '2', '3']

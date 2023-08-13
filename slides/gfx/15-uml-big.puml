@@ -10,9 +10,9 @@ together {
     class WarriorBuilder {}
 }
 
-EnemyFactory .down.> TrollBuilder   : instantiates
-EnemyFactory .down.> GhoulBuilder   : " instantiates"
-EnemyFactory .down.> WarriorBuilder : instantiates
+EnemyFactory -down[dotted]-> TrollBuilder   : instantiates
+EnemyFactory -down[dotted]-> GhoulBuilder   : " instantiates"
+EnemyFactory -down[dotted]-> WarriorBuilder : instantiates
 
 abstract class Enemy
 'together {
@@ -31,9 +31,9 @@ Troll   o.down. EnemyCoordinator
 Ghoul   o.down. EnemyCoordinator
 Warrior o.down. EnemyCoordinator
 
-TrollBuilder   ..> Troll   : " builds"
-GhoulBuilder   ..> Ghoul   : " builds"
-WarriorBuilder ..> Warrior : " builds"
+TrollBuilder   -[dotted]-> Troll   : " builds"
+GhoulBuilder   -[dotted]-> Ghoul   : " builds"
+WarriorBuilder -[dotted]-> Warrior : " builds"
 
 abstract class Weapon {}
 class Sword
