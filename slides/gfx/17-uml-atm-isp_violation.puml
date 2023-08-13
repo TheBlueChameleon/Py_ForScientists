@@ -1,0 +1,42 @@
+@startuml;
+hide empty members
+
+together{
+    interface ATM_UI {
+        + requestDepositAmount()
+        + requestWithdrawalAmount()
+        + requestTransferAmount()
+        + informInsufficientFunds()
+    }
+
+    class Screen_UI
+    class Braille_UI
+    class Speech_UI
+
+    Screen_UI  -up-> ATM_UI
+    Braille_UI -up-> ATM_UI
+    Speech_UI  -up-> ATM_UI
+}
+
+together{
+    interface Transaction {
+        + execute()
+    }
+
+    class Deposit_Transaction
+    class Withdrawal_Transaction
+    class Transfer_Transaction
+
+    Deposit_Transaction    -up-> Transaction
+    Withdrawal_Transaction -up-> Transaction
+    Transfer_Transaction   -up-> Transaction
+}
+
+<> junction
+Transaction .up.> junction : " uses"
+
+Screen_UI  <.. junction
+Braille_UI <.. junction
+Speech_UI  <.. junction
+
+@enduml;

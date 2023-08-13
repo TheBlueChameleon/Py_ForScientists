@@ -1,0 +1,44 @@
+@startuml;
+hide empty members
+
+together{
+    interface Transaction {
+        + execute()
+    }
+
+    class Deposit_Transaction
+    class Withdrawal_Transaction
+    class Transfer_Transaction
+
+    Deposit_Transaction    -up-> Transaction
+    Withdrawal_Transaction -up-> Transaction
+    Transfer_Transaction   -up-> Transaction
+}
+
+
+together{
+    interface Deposit_UI    {
+        + requestDepositAmount()
+    }
+
+    interface Withdrawal_UI {
+        + requestWithdrawalAmount()
+        + informInsufficientFunds()
+    }
+    interface Transfer_UI   {
+        + requestTransferAmount()
+        + informInsufficientFunds()
+    }
+}
+
+Deposit_UI    .up.> Deposit_Transaction
+Withdrawal_UI .up.> Withdrawal_Transaction
+Transfer_UI   .up.> Transfer_Transaction
+
+interface ATM_UI
+
+ATM_UI -up-> Withdrawal_UI
+ATM_UI -up-> Deposit_UI
+ATM_UI -up-> Transfer_UI
+
+@enduml;

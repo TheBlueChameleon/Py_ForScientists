@@ -1,0 +1,8 @@
+@startuml;
+hide empty members
+
+Mechanism .down.> Policy    : "  depends on"
+Utility   .down.> Mechanism : "  depends on"
+
+
+@enduml;

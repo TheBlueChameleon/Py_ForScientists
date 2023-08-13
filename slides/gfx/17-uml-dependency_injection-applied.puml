@@ -1,0 +1,14 @@
+@startuml;
+hide empty members
+
+Utility -up-> MechanismService
+
+Mechanism .right.> MechanismService
+Mechanism -up-> PolicyService
+interface MechanismService
+
+Policy .right.> PolicyService
+interface PolicyService
+
+
+@enduml;
