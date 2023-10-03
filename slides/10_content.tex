@@ -119,7 +119,7 @@ Of course, you can also use a settings file without command line parameters and 
 
 \begin{frame}[fragile]
 %
-\vspace{-6pt}
+\vspace{-12pt}
 \begin{columns}[T]
 \column{.46\linewidth}
 \begin{codebox}[Example: main.py]
@@ -149,7 +149,7 @@ print(" done")
 \end{minted}
 \end{codebox}
 %
-\vspace{-3pt}
+\vspace{-10pt}
 \begin{codebox}[Example: Utility.py]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 import Constants
@@ -160,6 +160,7 @@ def show_constants():
 \end{codebox}
 \end{columns}
 %
+\vspace{-4pt}
 \begin{cmdbox}[Output]
 \begin{minted}[fontsize=\scriptsize]{text}
 Initializing Constants ... done
@@ -226,7 +227,7 @@ Utility: 1989
 
 \begin{frame}[fragile]
 %
-\vspace{-6pt}
+\vspace{-12pt}
 \begin{columns}[T]
 \column{.46\linewidth}
 \begin{codebox}[Example: main.py]
@@ -256,7 +257,7 @@ class Constants:
 \end{minted}
 \end{codebox}
 %
-\vspace{-3pt}
+\vspace{-10pt}
 \begin{codebox}[Example: Utility.py]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 from Constants import Constants
@@ -267,6 +268,7 @@ def show_constants():
 \end{codebox}
 \end{columns}
 %
+\vspace{-4pt}
 \begin{cmdbox}[Output]
 \begin{minted}[fontsize=\scriptsize]{text}
 Initializing Constants
@@ -282,6 +284,7 @@ Utility: 1337
 
 \begin{frame}[fragile]{Problems With That Approach}
 %
+\vspace{-9pt}
 \begin{warnbox}[Cross-Referencing Constants, leftupper=7mm]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 class Constants:
@@ -311,6 +314,7 @@ Constants.SIGNATURE = f"Library v{Constants.VERSION}"
 
 \begin{frame}[fragile]{Atlernative: Instantiation}
 %
+\vspace{-9pt}
 \begin{codebox}[Constants.py]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
 class ConstantsClass:
@@ -330,6 +334,8 @@ if __name__ == "__main__":
     print(Constants.SIGNATURE)
 \end{minted}
 \end{codebox}
+%
+Or: Use \emph{Singleton} Pattern!
 %
 \end{frame}
 
@@ -394,7 +400,7 @@ All of the above are valid patterns. What you actually implement depends on your
 %
 \begin{itemize}
 \item There can be positional/mandatory parameters as well as optional parameters
-\item The oder of optional parameters is not important but specified by a keyword
+\item The order of optional parameters is not important but specified by a keyword
 \item Optional parameters have a prefix hyphen (\zB \texttt{program -d})
 	\begin{itemize}
 	\item A single hyphen indicates the short form (one character) of the parameter
@@ -539,7 +545,7 @@ class GlobalsClass:
         parser = argparse.ArgumentParser(description="runs a simulation")
 
         parser.add_argument("inputFiles", nargs="+")
-        parser.add_argument("--logfile", help="redirects help to a file")
+        parser.add_argument("--logfile", help="redirects output to a file")
         parser.add_argument("--settings", default="settings.ini")
         parser.add_argument("--debug", action='store_true')
 
@@ -570,7 +576,7 @@ positional arguments:
 
 options:
   -h, --help           show this help message and exit
-  --logfile LOGFILE    redirects help to a file
+  --logfile LOGFILE    redirects output to a file
   --settings SETTINGS
   --debug
 
@@ -636,7 +642,7 @@ serverdir = /local/hartinger/
 %
 \begin{hintbox}[Context]
 \footnotesize
-I used this in a tool to exchange files between my personal computer and various UR machines via ssh/scp. Default communication should happen on the machine phy314, but a command like \\
+I used this in a tool to exchange files between my personal computer and various UR machines via ssh/scp. Default communication should happen on the machine rex1, but a command like \\
 \texttt{remote push myFile --preset workgroup} \\
 should use a different set of parameters.
 \end{hintbox}
@@ -721,7 +727,7 @@ Neither in \texttt{.ini} files nor in your code. Just don't do it.
 \item Multiline values
 	\begin{itemize}
 	\item Possible
-	\item The second to last line need to be indented wrt. the first line
+	\item The second to last lines need to be indented wrt. the first line
 	\end{itemize}
 \end{itemize}
 %
