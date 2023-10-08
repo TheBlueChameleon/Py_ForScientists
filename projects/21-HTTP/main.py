@@ -15,6 +15,7 @@
 from Portfinder import get_http_port
 from Server import Server
 
+
 def main():
     ip = ''
     port = get_http_port()

@@ -16,10 +16,14 @@ class FormDataElement(typing.NamedTuple):
 def parse_multipart(message: bytes, content_descriptor_elements: list[str]) -> dict[str, FormDataElement]:
     """
     A POST message looks like this:
-      '--[segment][segment][...]--'
+      '--[segment][segment][...][boundary]--[linebreak]'
 
     in which each [segment] corresponds to a html form item and looks like
-      '[boundary]\\r\\n[header]\\r\\n\\r\\n[content]--'
+      '--[boundary][linebreak][header][linebreak][linebreak][content]'
+    (which means that the first segment will be preceded by four dashes:
+    two from --[segment] and two from --[boundary]).
+
+    Linebreak is the sequence [carriage return][linefeed] (/r/n)
 
     The [boundary] is given in content_descriptor_elements[1] as a string of the form
         "boundary=[boundary]"
@@ -37,9 +41,9 @@ def parse_multipart(message: bytes, content_descriptor_elements: list[str]) -> d
 
     boundary_line = content_descriptor_elements[1]
     boundary_pos = boundary_line.find("=") + 1
-    boundary = boundary_line[boundary_pos:].encode('ascii')
+    boundary = b"--" + boundary_line[boundary_pos:].encode('ascii')
 
-    segments = message.split(boundary)[1:-1]  # first and last segment only contain "--"
+    segments = message.split(boundary)[1:-1]  # first and last segment are empty or "--[linebreak]", respectively
     for s in segments:
         content, header = parse_multipart_segment(s)
         fde = FormDataElement(content=content, header=header)
@@ -50,7 +54,7 @@ def parse_multipart(message: bytes, content_descriptor_elements: list[str]) -> d
 def parse_multipart_segment(segment: bytes) -> tuple[bytes, dict[str, str]]:
     """
     This function expects a POST message segment in the form:
-        '\\r\\n<header>\\r\\n\\r\\n<content>--\\r\\n'
+        '[linebreak]<header>[linebreak][linebreak]<content>--[linebreak]'
     and transforms it into a tuple of content and a header dict
 
     :param segment: the data pertaining to one html form item, with two padding bytes in front and back each for easier
@@ -58,12 +62,12 @@ def parse_multipart_segment(segment: bytes) -> tuple[bytes, dict[str, str]]:
     :return: a tuple of (form item payload, dict of header data)
     """
 
-    relevant_part = segment[2:-4]
+    relevant_part = segment[2:-2]  # remove preceding and trailing line break from boundary markers
     header_raw, content = relevant_part.split((LINE_BREAK * 2).encode('ascii'), 1)
     header_str = header_raw.decode('ascii')
     header_dct = parse_multipart_header(header_str)
-    if not header_dct.get(HttpHeaders.content_length):
-        header_dct[HttpHeaders.content_length] = str(len(content))
+    if not header_dct.get(HttpHeaders.content_length.name):
+        header_dct[HttpHeaders.content_length.name] = str(len(content))
     return content, header_dct
 
 
@@ -81,7 +85,7 @@ def parse_multipart_header(header: str) -> dict[str, str]:
     """
 
     result = dict()
-    lines: list[str] = header.split(LINE_BREAK * 2)
+    lines: list[str] = header.split(LINE_BREAK)
 
     # first line starts with "Content-Disposition: form-data;"
     # Only text behind that is relevant
@@ -89,8 +93,9 @@ def parse_multipart_header(header: str) -> dict[str, str]:
     first_line_relevant = lines[0][first_line_relevant_index + 1:]
     first_line_components = first_line_relevant.split(";")
     for component in first_line_components:
+        key: str; value:str
         key, value = component.split("=")
-        key = key.strip()
+        key = key.strip().lower()
         value = value[1:-1]  # remove quotation marks
         result[key] = value
 
