@@ -1,0 +1,57 @@
+<html>
+<body>
+
+<h1>PRINT SERVER DIALOG</h1>
+<form enctype="multipart/form-data" action="request_print" method="POST">
+
+<table>
+    <tr>
+        <td>File To Print:</td>
+        <td><input type="file" name="file" /></td>
+    </tr>
+    <tr>
+        <td>Printer Settings File (PSF):</td>
+        <td><input type="file" name="PSF" /></td>
+    </tr>
+    <tr style="height:30px; vertical-align:bottom;">
+        <td colspan="2">Note: If no PSF is specified, default settings are used.</td>
+    </tr>
+
+    <tr>
+        <td colspan="2"><input type="submit" value="Submit"></td>
+    </tr>
+</table>
+</form>
+
+<h1>GENERATE PRINTER SETTINGS FILE (PSF)</h1>
+<form enctype="application/x-www-form-urlencoded" action="request_psf" method="POST">
+<!-- application/x-www-form-urlencoded is the default enctype-->
+<table>
+    <tr>
+        <td>Double Sided:</td>
+        <td><input type="checkbox" name="double_sided" /></td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            <input type="radio" name="colour" value="full" />
+            Full Color
+            <br>
+            <input type="radio" name="colour" value="grayscale" />
+            Grayscale
+            <br>
+            <input type="radio" name="colour" value="black_and_white" />
+            Black and White
+        </td>
+    </tr>
+    <tr>
+        <td>Number of Copies:</td>
+        <td><input type="number" name="count" value="1" min="1" step="1" /></td>
+    </tr>
+    <tr>
+        <td colspan="2"><input type="submit" value="Submit"></td>
+    </tr>
+</table>
+</form>
+
+</body>
+</html>
