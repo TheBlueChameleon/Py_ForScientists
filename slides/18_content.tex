@@ -52,7 +52,7 @@ Source: \url{https://xkcd.com/217/}
 \begin{frame}[fragile]{Formally Prooving Correctness}
 %
 \begin{itemize}
-\item Programming is complex and it's easy to make mistakes$\phantom{.}^{\color{blue}\href{https://xkcd.com/285/}{\text{citation needed}}}$
+\item Programming is complex and it's easy to make mistakes$\phantom{.}^{\color{blue}\href{https://xkcd.com/285/}{\text{[citation needed]}}}$
 \item Testing every possible input manually is tedious and equally prone to errors
 \item[\Thus] It would be nice if we could simply proove correctness, \zB by means of a mathematical proof.
 \pause
@@ -87,7 +87,7 @@ Source: \url{https://xkcd.com/217/}
 	\item Assume $H$ with the above properties exists.
 	\item Then we can construct a program $X$ that takes a program $Y$ as input:
 		\begin{itemize}
-		\item Run $T = H(Y, Y)$
+		\item Run $T := H(Y, Y)$
 		\item If $T == True$: go into infinite loop
 		\item Otherwise, terminate.
 		\end{itemize}
