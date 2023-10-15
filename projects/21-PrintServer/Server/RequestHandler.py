@@ -73,7 +73,7 @@ class RequestHandler(hs.BaseHTTPRequestHandler):
 
     def answer_html(self, html: str, response_code: HTTPStatus = HTTPStatus.OK):
         self.answer(
-            {HttpHeaders.content_type: "text/html", },
+            {HttpHeaders.content_type: "text/html; charset=utf-8", },
             html.encode('utf-8'),
             response_code
         )
@@ -82,7 +82,7 @@ class RequestHandler(hs.BaseHTTPRequestHandler):
         self.answer(
             {
                 HttpHeaders.content_type: "application/octet-stram",
-                "content-disposition": "attachment; filename=\"" + filename + "\""
+                "content-disposition": f'attachment; filename="{filename}"'
             },
             file,
             response_code
