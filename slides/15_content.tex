@@ -88,7 +88,24 @@ $^{*)}$ REPL means \emph{Read-Eval-Print-Loop}, \ie a programming interface wher
 \vspace{-3pt}
 \begin{codebox}[Example: Function DocString]
 \begin{minted}[linenos, fontsize=\scriptsize]{python3}
-,
+def print_head(text, width = 80) :
+    """
+    Prints a boxed headline.
+    :param text: the text to put in the box
+    :param width: the width in characters of the headline
+    :returns: None
+
+    Example:
+    >>> print_head('headline', 40)
+    ########################################
+    #               headline               #
+    ########################################
+    """
+
+    formattext = "{" + f":^{width - 4}" + "}"            # e.g. "{:^36}"
+    print("#" * width)
+    print("# " + formattext.format(text) + " #")
+    print("#" * width)
 
 help(print_head)
 \end{minted}
