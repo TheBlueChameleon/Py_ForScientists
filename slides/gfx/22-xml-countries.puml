@@ -1,0 +1,60 @@
+@startuml
+
+map "**rank**" as Lichtenstein_rank {
+    text => 1
+}
+
+map "**year**" as Lichtenstein_year {
+    text => 2008
+}
+
+map "**gdppc**" as Lichtenstein_gdppc {
+    text => 141100
+}
+
+map "**neighbour**" as Lichtenstein_neighbour1 {
+    name => Austria
+    direction => E
+}
+
+map "**neighbour**" as Lichtenstein_neighbour2 {
+    name => Switzerland
+    direction => N
+}
+
+map "**country**" as c1 {
+    name => Lichtenstein
+    children *--> Lichtenstein_rank
+    children *--> Lichtenstein_year
+    children *--> Lichtenstein_gdppc
+    children *--> Lichtenstein_neighbour1
+    children *--> Lichtenstein_neighbour2
+}
+
+' ================================================================================================ '
+
+map "**country**" as c2 {
+    rank => 4
+    year => 2011
+    gdppc => 59900
+    children =>
+}
+
+' ================================================================================================ '
+
+map "**country**" as c3 {
+    rank => 68
+    year => 2011
+    gdppc => 13600
+    children =>
+}
+
+' ================================================================================================ '
+
+map "**data**" as data {
+    children *--> c1
+    children *--> c2
+    children *--> c3
+}
+
+@enduml

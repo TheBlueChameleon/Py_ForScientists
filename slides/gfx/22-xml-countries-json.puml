@@ -1,0 +1,58 @@
+
+
+@startjson
+{
+    "data" : {
+        "text" : "",
+        "children": {
+            "country" : {
+                "name" : "Lichtenstein",
+                "text" : "",
+                "children": {
+                    "rank" : {"text" : 1},
+                    "year" : {"text" : 2008},
+                    "gdppc" : {"text" : 141100},
+                    "neighbour" : {
+                        "name" : "Austria",
+                        "direction" : "E"
+                    },
+                    "neighbour" : {
+                        "name" : "Switzerland",
+                        "direction" : "W"
+                    }
+                }
+            },
+
+
+            "country" : {
+                "name" : "Singapore",
+                "text" : "",
+                "children": {
+                    "rank" : {"text" : 4},
+                    "year" : {"text" : 2011},
+                    "gdppc" : {"text" : 59900},
+                    "neighbour" : {
+                        "name" : "Malaysia",
+                        "direction" : "N"
+                    }
+                }
+            },
+
+
+            "country" : {
+                "name" : "Singapore",
+                "text" : "",
+                "children": {
+                    "rank" : {"text" : 4},
+                    "year" : {"text" : 2011},
+                    "gdppc" : {"text" : 59900},
+                    "neighbour" : {
+                        "name" : "Malaysia",
+                        "direction" : "N"
+                    }
+                }
+            }
+        }
+    }
+}
+@endjson
