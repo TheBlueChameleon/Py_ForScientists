@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<style>
+    a:link {
+        color:olive;
+    }
+    a:hover {
+        background-color: gold;
+        transition: background-color 0.5s;
+    }
+    a:visited {
+        color:blue;
+    }
+</style>
+</head>
+
+<body>
+<h1>Lorem ipsum</h1>
+<p><a href="https://www.lipsum.com/">Lorem ipsum</a>  dolor sit amet, consectetur adipiscing elit. Ut malesuada luctus est, sit amet gravida lacus porttitor sit amet. Fusce et molestie leo, ut pretium arcu. Nunc ullamcorper lectus nulla, at cursus orci vulputate ornare. Vivamus ut accumsan elit. Etiam facilisis in tellus et vestibulum. Aenean dignissim risus nisi, ut scelerisque sapien eleifend nec. <a href="#second">Vestibulum</a> hendrerit molestie mauris, eget dignissim neque consectetur et. Sed vitae neque at leo auctor dictum. Cras laoreet purus quam, commodo bibendum nisi molestie venenatis. Pellentesque condimentum ipsum tempus ipsum sodales, a bibendum leo iaculis. Aenean porta eu erat sit amet sodales. Nunc tempor euismod ex, in tempor libero imperdiet placerat. Vivamus eget tristique libero. <a style="color:green;" href="#third">Praesent</a> mattis mauris ut tincidunt accumsan.</p>
+
+<h2 id="second">Second paragraph</h2>
+<p>Nunc ornare placerat turpis, vel finibus sapien semper tincidunt. Donec varius lectus erat. Pellentesque et nulla sodales, tempus est non, eleifend justo. Phasellus ac mauris et elit ullamcorper pharetra. Aliquam erat volutpat. Vivamus quis suscipit felis. Nam euismod nec nulla sit amet varius.</p>
+
+<a name="third"></a>
+<!--
+    Technically, here I could have used :
+    <a ... />
+    However, HTML parsers need to accomodate for the less strict rules of SGML (when compared to XML).
+    One difference is that tags without content may simply be written without ever closing them.
+    <br>
+    is identical to
+    <br />
+    So, most HTML parsers are written to simply ignore the closing notation in <tag />.
+    A consequence is that, instead of just placing an anchor, Chrome interprets the entire rest of the document as part of the a-tag,
+    and that it consequently applies the associated style.
+    This may be different in other browsers.
+    Just in case you wondered why web devellopers are always in a bad mood when talking about their work.
+-->
+<p>Pellentesque diam dui, rhoncus vitae feugiat nec, congue eu lorem. Integer dictum commodo arcu, sed tempus nisl fermentum ut. Integer tincidunt vitae lectus quis pellentesque. Cras viverra, neque ut venenatis convallis, nunc ligula porttitor sem, id mollis est nunc sit amet ipsum. Vivamus bibendum nulla sapien, non malesuada eros euismod eu. Praesent nulla arcu, tempus eget malesuada id, sagittis eu turpis. Pellentesque eu sollicitudin est. Duis gravida lacus dapibus nisl scelerisque, sed tempus arcu laoreet. Mauris ornare, tortor id volutpat placerat, metus erat sodales nisl, non egestas purus ex at enim. Aenean pellentesque interdum felis sed placerat. Curabitur eu condimentum dui. Mauris orci turpis, gravida eget dignissim sit amet, sodales sed metus. Ut eleifend nisi laoreet arcu finibus, finibus hendrerit massa tincidunt. Donec pharetra mauris sit amet suscipit bibendum. Nam rhoncus elementum augue at rutrum.</p>
+
+<p>Nunc volutpat ex vitae lorem lacinia, id laoreet nisl viverra. Cras ut pretium nisi, non efficitur tortor. Pellentesque imperdiet interdum lorem. Nam id placerat orci, nec faucibus dolor. Pellentesque nec facilisis magna. In quis orci eu nisl dapibus euismod. Sed quis dapibus risus. Ut ante dui, ornare quis erat sed, consectetur eleifend turpis. Morbi aliquet orci a lacus consectetur, consectetur tincidunt sapien molestie. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;</p>
+
+<p>Donec tristique elementum nisl eget blandit. Sed mollis velit in augue faucibus tempor. In hac habitasse platea dictumst. Sed placerat accumsan justo, et congue nisl faucibus et. In vel finibus ante. Vestibulum sit amet cursus orci. Cras et placerat nulla. Praesent quis fringilla libero. Integer auctor magna justo, faucibus dapibus ante semper sed. Vestibulum id enim magna. Etiam congue neque sed ex vestibulum, a luctus nisl venenatis. Pellentesque ut augue quis dolor dignissim dignissim eget sed dui.</p>
+
+</body>
+</html>

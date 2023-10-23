@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    table {
+        font-size: 120%;
+        font-family: sans-serif;
+    }
+
+    table.basics {
+        border:3px solid midnightblue;
+        background-color:skyblue;
+    }
+    table.basics td {
+        border-width:1px;
+        border-color: black;
+        border-style: dashed; /*dotted;*/
+        border-spacing: 10px;
+        padding: 10px;
+        background-color:LightYellow;
+        color:black;
+    }
+    table.basics th {
+        background-color:teal;
+        padding: 10px;
+        color:cyan;
+        font-size: 150%;
+        font-style: italic;
+    }
+
+    table.banded {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border-spacing: 0px;
+    }
+    table.banded tr:nth-child(even) {
+        background-color: #D6EEEE;
+    }
+</style>
+
+<body>
+<h1>Tables</h1>
+<h2>Default Look</h2>
+<table style="width:150mm; border:3px solid;">
+    <tr>
+        <th style="border:1px solid;">A</th>
+        <th style="border:1px solid;">A</th>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+</table>
+
+<h2>Colors and Merged Cells</h2>
+<table class="basics" width="300mm">
+    <tr>
+        <th> </th>
+        <th>A</th>
+        <th>B</th>
+        <th>C</th>
+        <th>D</th>
+    </tr>
+    <tr>
+        <th>1</th>
+        <td>A1</td>
+        <td>B1</td>
+        <td colspan="2">C1 and D1</td>
+    </tr>
+    <tr>
+        <th>2</th>
+        <td>
+            A2<br/>
+            multiline content
+        </td>
+        <td>B2</td>
+        <td rowspan="2">
+            C2<br/>
+            and<br/>
+            C3
+        </td>
+    </tr>
+    <tr>
+        <th>3</th>
+        <td></td>
+    </tr>
+    <caption style="caption-side:bottom">Welcome to the Web, 1995 ;)</caption>
+</table>
+
+<h2>Banded Rows</h2>
+<table class="banded" width="300mm">
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+</table>
+
+</body>
+</html>
